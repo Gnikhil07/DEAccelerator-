@@ -102,66 +102,92 @@
   }
 
   form {
-    margin: 10px 10px 10px;
-    padding: 2;
+    padding: 0;
     width: 100%;
     height: 100%;
   }
 
   .aquabox {
+    position: relative;
     margin-left: 60px;
     margin-right: 50px;
     float: left;
-  }
 
-  .bluebox {
-    position: relative;
-    top: auto;
-    height: fit-content;
+    padding: 44px;
+    margin: 20px;
+    margin-top: 0px;
   }
 
   .bluebox {
     position: relative;
     height: fit-content;
+    border: 1px solid lightgray;
+    padding: 45px;
+    margin-top: -17px;
     margin-left: 560px;
+    margin-bottom: 0px;
+    border-top: none;
+    border-right: none;
+    margin-bottom: 17px;
+
   }
+
+
   .bluebox select {
     width: 450px;
     height: 30px;
 
   }
+
   .greenbox {
-    margin-top: 50px;
-    margin-left: 60px;
-    margin-bottom: 10px;
-    margin-right: 50px;
+    position: relative;
+    margin-top: -18.5px;
     float: left;
-    border: 1px;
+    border: 1px solid lightgray;
+    padding: 44px;
+    padding-bottom: 95px;
+    padding-right: 45.5px;
+    padding-left: 65px;
+    margin-left: 0px;
+    border-bottom: none;
+    border-left: none;
+    
   }
 
   .greenbox select {
     width: 450px;
     height: 30px;
   }
+
   .tanbox select {
     width: 450px;
     height: 30px;
   }
+
   .tanbox {
     position: relative;
+    top: -18.5px;
     height: fit-content;
+    padding: 45px;
+    padding-bottom: 93px;
+    padding-right: 60px;
+    margin: 10px;
     margin-left: 560px;
-    margin-top: 57px;
+    
+    
+
     
 
   }
 
+ 
   .schedule select {
     position: relative;
     width: 90px;
     height: 20px;
   }
-#Schedule{
+
+  #Schedule {
     margin-bottom: 20px;
     width: 450px;
     height: 30px;
@@ -173,15 +199,22 @@
     left: 5px;
     width: 70px;
     height: 20px;
+    
 
 
   }
+  .button2{
+    position: relative;
+    top:20px;
+    
+  }
+
 </style>
 
 <body>
   <header>
     <i class=img1></i>
-    <a href="{{ url_for('logout') }}" type="logout" value="logout"><i class = button1></i></a>
+    <a href="{{ url_for('logout') }}" type="logout" value="logout"><i class=button1></i></a>
     <i class=user1></i>
     <h1 style="font: 1.2em Calibri;" id='user'>{{account}}</h1>
     <div id="nav-placeholder">
@@ -198,7 +231,7 @@
     </div>
     <div class="back1"></div>
     <div class="topnav" id="myTopnav">
-      <a href="#" class="active" style="font: 1em Calibri;" >Setup</a>
+      <a href="#" class="active" style="font: 1em Calibri;">Setup</a>
       <a style="font: 1em Calibri;" href="#">Metadata</a>
       <a href="javascript:void(0);" class="icon" onclick="myFunction()">
         <i class="fa fa-bars"></i>
@@ -210,7 +243,7 @@
         <ul>
           <div class="aquabox">
             <li>
-              <label  for="Project Name"><B>Project Name:</B></label>
+              <label for="Project Name"><B>Project Name:</B></label>
               <input type="text" id="Project Name" name="Project Name">
             </li>
             <li>
@@ -218,7 +251,7 @@
                 <label for="Schedule"><B>Schedule:</B></label>
                 <select id="Schedule" name="Schedule" onchange="onScheduleSelected()">
                   <option id="None" value="None" selected>None</option>
-                  <option id="Schedule" value="Schedule" >Schedule</option>
+                  <option id="Schedule" value="Schedule">Schedule</option>
                 </select>
                 <div id="div11">
                   <select id="Every" name="Every">
@@ -335,45 +368,43 @@
                 </ul>
               </div>
             </li>
-          <div id="div13">
-            <ul>
-              <li>
-                <label for="account_name">Account Name:</label>
-                <input type="text" id="account_name" name="account_name">
-              </li>
-              <li>
-                <label for="account_key">Storage Account Access Key:</label>
-                <input type="text" id="account_key" name="account_key">
-              </li>
-              <li>
-                <label for="ContainerName">Container Name:</label>
-                <input type="text" id="ContainerName" name="ContainerName">
-              </li>
-              <li>
-                <label for="Blob Name">Blob Name:</label>
-                <input type="text" id="Blob Name" name="Blob Name">
-              </li>
-              <li>
-                <label for="azure file format">File Format:</label>
-                <select id="azure file format" name="azure file format" >
-                  <option id="azure file format csv" value="csv">csv</option>
-                </select>
-              </li>
-              <li>
-                <label  for="azure file delimiter">Azure File Delimiter:</label>
-                <input type="text" id="azure file delimiter" name="azure file delimiter">
-              </li>
-            </ul>
+            <div id="div13">
+              <ul>
+                <li>
+                  <label for="account_name">Account Name:</label>
+                  <input type="text" id="account_name" name="account_name">
+                </li>
+                <li>
+                  <label for="account_key">Storage Account Access Key:</label>
+                  <input type="text" id="account_key" name="account_key">
+                </li>
+                <li>
+                  <label for="ContainerName">Container Name:</label>
+                  <input type="text" id="ContainerName" name="ContainerName">
+                </li>
+                <li>
+                  <label for="Blob Name">Blob Name:</label>
+                  <input type="text" id="Blob Name" name="Blob Name">
+                </li>
+                <li>
+                  <label for="azure file format">File Format:</label>
+                  <select id="azure file format" name="azure file format">
+                    <option id="azure file format csv" value="csv">csv</option>
+                  </select>
+                </li>
+                <li>
+                  <label for="azure file delimiter">Azure File Delimiter:</label>
+                  <input type="text" id="azure file delimiter" name="azure file delimiter">
+                </li>
+              </ul>
+            </div>
+            </li>
           </div>
-        </li>
-      </div>
           <div class="greenbox">
             <li>
               <label for="Target"><B>Target Location type:</B></label>
               <select id="Target" name="Target Location Type" onchange="onTargetLocationSelected()">
-                <option value="My PC">My PC</option>
-                <option value="MySql">MySql</option>
-                <option value="Hive">Hive</option>
+                
                 <option value="ADLS Gen 1" selected>ADLS Gen 1:</option>
               </select>
             </li>
@@ -410,16 +441,18 @@
               </div>
             </li>
             <li>
-              <input type="submit" value="Submit" style="width: 150px;
-            height: 40px;
-            background: cornflowerblue 0% 0% no-repeat padding-box;
-            border-radius: 8px;
-            opacity: 1;
-            text-align: center;
-            font: 1em Calibri;
-            letter-spacing: 0px;
-            color: #FFFFFF;
-            opacity: 1;">
+              <div class="button2">
+                <input type="submit" id=submit value="Submit" style="width: 150px;
+                height: 40px;
+                background: cornflowerblue 0% 0% no-repeat padding-box;
+                border-radius: 8px;
+                opacity: 1;
+                text-align: center;
+                font: 1em Calibri;
+                letter-spacing: 0px;
+                color: #FFFFFF;
+                opacity: 1;">
+              </div>
             </li>
           </div>
           <div class="tanbox">
@@ -438,34 +471,33 @@
             </li>
             <li>
               <div class="filetype1">
-                <li>
-                  <label for="Target filetype"><B>Target File type:</B></label>
-                  <select id="Target filetype" name="Target filetype" onchange="onfiletype()">
-                    <option value="ORC" selected>ORC</option>
-                    <option value="Parquet">Parquet</option>
-                    <option value="Flatfiles" >Delimited File</option>
-                  </select>
+            <li>
+              <label for="Target filetype"><B>Target File type:</B></label>
+              <select id="Target filetype" name="Target filetype" onchange="onfiletype()">
+                <option value="ORC" selected>ORC</option>
+                <option value="Parquet">Parquet</option>
+                <option value="Flatfiles">Delimited File</option>
+              </select>
 
-                </li>
-                <li>
-                  <div id="div10">
-                    <ul>
-                      <li>
-                        <label for="Delimiter1"><B>Type of Delimiter:</B></label>
-                        <input type="text" id="Delimiter1" name="Delimiter1"></input>
-                      </li>
-                    </ul>
-                  </div>
-                </li>
-                <li>
-                </div>
-              
             </li>
-
-
+            <li>
+              <div id="div10">
+                <ul>
+                  <li>
+                    <label for="Delimiter1"><B>Type of Delimiter:</B></label>
+                    <input type="text" id="Delimiter1" name="Delimiter1"></input>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li>
           </div>
+
         </ul>
+     
       </a>
+       
+      
     </form>
 
 
@@ -520,6 +552,7 @@
           document.getElementById("div4").style.display = "none";
           document.getElementById("div13").style.display = "none";
 
+
         }
         if (source == "MySql") {
           document.getElementById("div1").style.display = "none";
@@ -527,6 +560,7 @@
           document.getElementById("div3").style.display = "none";
           document.getElementById("div4").style.display = "none";
           document.getElementById("div13").style.display = "none";
+
 
         }
         if (source == "Hive") {
@@ -536,6 +570,7 @@
           document.getElementById("div4").style.display = "none";
           document.getElementById("div13").style.display = "none";
 
+
         }
         if (source == "AzureBlob") {
           document.getElementById("div1").style.display = "none";
@@ -543,13 +578,14 @@
           document.getElementById("div3").style.display = "none";
           document.getElementById("div4").style.display = "none";
           document.getElementById("div13").style.display = "block";
-      }
+        }
         if (source == "One Drive") {
           document.getElementById("div1").style.display = "none";
           document.getElementById("div2").style.display = "none";
           document.getElementById("div3").style.display = "none";
           document.getElementById("div4").style.display = "block";
           document.getElementById("div13").style.display = "none";
+
 
         }
       }
@@ -564,6 +600,7 @@
           document.getElementById("div5").style.display = "block";
         }
       }
+
       function onfiletype() {
         var filetype = document.getElementById("Target filetype").value;
         if (filetype == "Flatfiles") {
@@ -572,6 +609,7 @@
           document.getElementById("div10").style.display = "none";
         }
       }
+
       function onScheduleSelected() {
         var Schedule = document.getElementById("Schedule").value;
         if (Schedule == "Schedule") {
