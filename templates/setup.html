@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Home</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='ingestdata.css') }}">
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+</head>
+<style>
+  .body {
+    font: 1em Calibri;
+    font: size 13.6px;
+  }
+
+  .img1 {
+    position: absolute;
+    top: 10px;
+    left: 80px;
+    width: 266px;
+    height: 32px;
+    background: transparent url('static/Group 298.svg');
+    border: 0;
+
+  }
+
+  .button1 {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 25px;
+    height: 25px;
+    background: transparent url('static/Shape.png') 0% 0% no-repeat padding-box;
+    opacity: 1;
+    border: none;
+    outline: none;
+  }
+
+  .user1 {
+    position: absolute;
+    top: 10px;
+    left: 988px;
+    width: 27px;
+    height: 27px;
+    background: transparent url('static/user.svg') 0% 0% no-repeat padding-box;
+    opacity: 1;
+    border: 0px;
+  }
+
+  .sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    overflow-x: hidden;
+    transition: 0.2s;
+    padding-top: 60px;
+    box-shadow: 0px 8px 24px #00000029;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+  }
+
+  .sidenav a {
+    padding: 7px 8px 8px 25px;
+    font-size: 25px;
+    display: block;
+    transition: 0.3s;
+  }
+
+
+  .sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 15px;
+    font-size: 36px;
+    margin-left: 10px;
+  }
+
+  #main {
+    position: absolute;
+    top: 0;
+    left: 12px;
+    font-size: 36px;
+    margin-left: 10px;
+  }
+
+  @media screen and (max-height: 450px) {
+    .sidenav {
+      padding-top: 15px;
+    }
+
+    .sidenav a {
+      font-size: 18px;
+    }
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  form {
+    margin: 10px 10px 10px;
+    padding: 2;
+    width: 100%;
+    height: 100%;
+  }
+
+  .aquabox {
+    margin-left: 60px;
+    margin-right: 50px;
+    float: left;
+  }
+
+  .bluebox {
+    position: relative;
+    top: auto;
+    height: fit-content;
+  }
+
+  .bluebox {
+    position: relative;
+    height: fit-content;
+    margin-left: 560px;
+  }
+  .bluebox select {
+    width: 450px;
+    height: 30px;
+
+  }
+  .greenbox {
+    margin-top: 50px;
+    margin-left: 60px;
+    margin-bottom: 10px;
+    margin-right: 50px;
+    float: left;
+    border: 1px;
+  }
+
+  .greenbox select {
+    width: 450px;
+    height: 30px;
+  }
+  .tanbox select {
+    width: 450px;
+    height: 30px;
+  }
+  .tanbox {
+    position: relative;
+    height: fit-content;
+    margin-left: 560px;
+    margin-top: 57px;
+    
+
+  }
+
+  .schedule select {
+    position: relative;
+    width: 90px;
+    height: 20px;
+  }
+#Schedule{
+    margin-bottom: 20px;
+    width: 450px;
+    height: 30px;
+  }
+
+  .schedule input {
+    position: relative;
+    top: 1px;
+    left: 5px;
+    width: 70px;
+    height: 20px;
+
+
+  }
+</style>
+
+<body>
+  <header>
+    <i class=img1></i>
+    <a href="{{ url_for('logout') }}" type="logout" value="logout"><i class = button1></i></a>
+    <i class=user1></i>
+    <h1 style="font: 1.2em Calibri;" id='user'>{{account}}</h1>
+    <div id="nav-placeholder">
+      <div id="main">
+        <a class="openbtn" onclick="openNav()"> <img src="static/Shape 1.svg"></a>
+      </div>
+      <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"><img src="static/Shape 1.svg"></a>
+        <a href="{{ url_for('overview') }}"><i class="fas fa-home"></i><img src="static/dashboard-active.svg"></a>
+        <a href="#"><i class="fas fa-home"></i><img src="static/cog.svg"></a>
+
+      </div>
+
+    </div>
+    <div class="back1"></div>
+    <div class="topnav" id="myTopnav">
+      <a href="#" class="active" style="font: 1em Calibri;" >Setup</a>
+      <a style="font: 1em Calibri;" href="#">Metadata</a>
+      <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+        <i class="fa fa-bars"></i>
+      </a>
+    </div>
+
+    <form action="{{ url_for('overviewform') }}" method="post">
+      <a class="setuppage">
+        <ul>
+          <div class="aquabox">
+            <li>
+              <label  for="Project Name"><B>Project Name:</B></label>
+              <input type="text" id="Project Name" name="Project Name">
+            </li>
+            <li>
+              <div class="schedule">
+                <label for="Schedule"><B>Schedule:</B></label>
+                <select id="Schedule" name="Schedule" onchange="onScheduleSelected()">
+                  <option id="None" value="None" selected>None</option>
+                  <option id="Schedule" value="Schedule" >Schedule</option>
+                </select>
+                <div id="div11">
+                  <select id="Every" name="Every">
+                    <option id="Every" value="Every" selected>Every</option>
+                    <option id="Every2" value="Every2">Every2</option>
+                    <option id="Every4" value="Every4">Every4</option>
+                    <option id="Every6" value="Every6">Every6</option>
+                    <option id="Every8" value="Every8">Every8</option>
+                    <option id="Every10" value="Every10">Every10</option>
+                    <option id="Every12" value="Every12">Every12</option>
+                  </select>
+                  <select id="hour1" name="hour1">
+                    <option id="minute" value="minute">minute</option>
+                    <option id="hour" value="hour">hour</option>
+                    <option id="day" value="day">day</option>
+                    <option id="week" value="week">week</option>
+                    <option id="month" value="month">month</option>
+
+                    <label for="starttime">starting at:</label>
+                    <input type="number" id=hr min="0" max="23" value="0">
+                    <input type="number" id=min min="0" max="59" value="0">
+                </div>
+              </div>
+
+            </li>
+          </div>
+          <div class="bluebox">
+            <li>
+              <label for="source"><B>Source Location type:</B></label>
+              <select id="source" name="source location type" onchange="onLocationSelected()">
+                <option id="googledrive" value="Google Drive">Google Drive Flat File</option>
+                <option id="onedrive" value="One Drive">One Drive Flat File</option>
+                <option id="sql" value="MySql">MySql</option>
+                <option id="hive" value="Hive">Hive</option>
+                <option id="AzureBlob" value="AzureBlob">Azure Blob</option>
+              </select>
+            </li>
+            <li>
+              <div id="div1">
+                <ul>
+                  <li>
+                    <label for="Sharable Link">Public Sharable Link:</label>
+                    <input type="text" id="Sharable Link" name="Public Sharable Link">
+                  </li>
+                  <li>
+                    <label for="Delimiter">Type of Delimiter:</label>
+                    <input type="text" id="Delimiter" name="Type of Delimiter">
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <div id="div2">
+              <ul>
+                <li>
+                  <label for="hostname">hostname:</label>
+                  <input type="text" id="hostname" name="hostname">
+                </li>
+                <li>
+                  <label for="password">password:</label>
+                  <input type="text" id="password" name="password">
+                </li>
+                <li>
+                  <label for="User">User:</label>
+                  <input type="text" id="User" name="User">
+                </li>
+                <li>
+                  <label for="database name">database name:</label>
+                  <input type="text" id="database name" name="database name">
+                </li>
+                <li>
+                  <label for="sql source query">source query:</label>
+                  <input type="text" id="sql source query" name="sql source query">
+                </li>
+              </ul>
+            </div>
+            <li>
+              <div id="div3">
+                <ul>
+                  <li>
+                    <label for="Server Name">Server Name:</label>
+                    <input type="text" id="Server Name" placeholder="abc.azurehdinsight.net" name="Server Name">
+                  </li>
+                  <li>
+                    <label for="Hive Database Name">Database Name:</label>
+                    <input type="text" id="Hive Database Name" name="Hive Database Name">
+                  </li>
+                  <li>
+                    <label for="Hive USER ID">User Id:</label>
+                    <input type="text" id="Hive USER ID" name="Hive USER ID">
+                  </li>
+                  <li>
+                    <label for="Hive PASSWORD">Password:</label>
+                    <input type="password" id="Hive PASSWORD" name="Hive PASSWORD">
+                  </li>
+                  <li>
+                    <label for="hive source query">Source Query:</label>
+                    <input type="text" id="hive source query" name="hive source query">
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li>
+
+              <div id="div4">
+                <ul>
+                  <li>
+                    <label for="Sharable Link">Public Downloadable Link:</label>
+                    <input type="text" id="Sharable Link" name="Public Downloadable Link">
+                  </li>
+                  <li>
+                    <label for="Delimiter">Type of Delimiter:</label>
+                    <input type="text" id="Delimiter" name="Delimiter of onedrive">
+                  </li>
+                </ul>
+              </div>
+            </li>
+          <div id="div13">
+            <ul>
+              <li>
+                <label for="account_name">Account Name:</label>
+                <input type="text" id="account_name" name="account_name">
+              </li>
+              <li>
+                <label for="account_key">Storage Account Access Key:</label>
+                <input type="text" id="account_key" name="account_key">
+              </li>
+              <li>
+                <label for="ContainerName">Container Name:</label>
+                <input type="text" id="ContainerName" name="ContainerName">
+              </li>
+              <li>
+                <label for="Blob Name">Blob Name:</label>
+                <input type="text" id="Blob Name" name="Blob Name">
+              </li>
+              <li>
+                <label for="azure file format">File Format:</label>
+                <select id="azure file format" name="azure file format" >
+                  <option id="azure file format csv" value="csv">csv</option>
+                </select>
+              </li>
+              <li>
+                <label  for="azure file delimiter">Azure File Delimiter:</label>
+                <input type="text" id="azure file delimiter" name="azure file delimiter">
+              </li>
+            </ul>
+          </div>
+        </li>
+      </div>
+          <div class="greenbox">
+            <li>
+              <label for="Target"><B>Target Location type:</B></label>
+              <select id="Target" name="Target Location Type" onchange="onTargetLocationSelected()">
+                <option value="My PC">My PC</option>
+                <option value="MySql">MySql</option>
+                <option value="Hive">Hive</option>
+                <option value="ADLS Gen 1" selected>ADLS Gen 1:</option>
+              </select>
+            </li>
+            <li>
+              <div id="div5">
+                <ul>
+                  <li>
+                    <label for="Target location"><B>Target location:</B></label>
+                    <input type="text" id="Target location" name="Target location"></input>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li>
+              <div id="div6">
+                <ul>
+                  <li>
+                    <label for="Target_Applicationid">Application Id:</label>
+                    <input type="text" id="Target_Applicationid" name="Target_Applicationid">
+                  </li>
+                  <li>
+                    <label for="target_ApplicationCredential">Application Credential:</label>
+                    <input type="text" id="target_ApplicationCredential" name="target_ApplicationCredential">
+                  </li>
+                  <li>
+                    <label for="Target_Directoryid">Directory Id:</label>
+                    <input type="text" id="Target_Directoryid" name="Target_Directoryid">
+                  </li>
+                  <li>
+                    <label for="Target_Adlaccount">Adlaccount:</label>
+                    <input type="text" id="Target_Adlaccount" name="Target_Adlaccount">
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li>
+              <input type="submit" value="Submit" style="width: 150px;
+            height: 40px;
+            background: cornflowerblue 0% 0% no-repeat padding-box;
+            border-radius: 8px;
+            opacity: 1;
+            text-align: center;
+            font: 1em Calibri;
+            letter-spacing: 0px;
+            color: #FFFFFF;
+            opacity: 1;">
+            </li>
+          </div>
+          <div class="tanbox">
+            <li>
+              <label for="Project Category"><B>Project Category:</B></label>
+              <input type="text" id="Project Category" name="Project Category" required>
+            </li>
+            <li>
+              <label for="Job Owner"><B>Job Owner:</B></label>
+              <input type="text" id="Job Owner" name="Job Owner" required>
+            </li>
+            <li>
+
+              <label for="Job Name"><B>Job Name:</B></label>
+              <input type="text" id="Job Name" name="Job Name" required></input>
+            </li>
+            <li>
+              <div class="filetype1">
+                <li>
+                  <label for="Target filetype"><B>Target File type:</B></label>
+                  <select id="Target filetype" name="Target filetype" onchange="onfiletype()">
+                    <option value="ORC" selected>ORC</option>
+                    <option value="Parquet">Parquet</option>
+                    <option value="Flatfiles" >Delimited File</option>
+                  </select>
+
+                </li>
+                <li>
+                  <div id="div10">
+                    <ul>
+                      <li>
+                        <label for="Delimiter1"><B>Type of Delimiter:</B></label>
+                        <input type="text" id="Delimiter1" name="Delimiter1"></input>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+                <li>
+                </div>
+              
+            </li>
+
+
+          </div>
+        </ul>
+      </a>
+    </form>
+
+
+    <script>
+      /* what is this ? */
+      function myFunction() {
+        var x = document.getElementById("myTopnav");
+        if (x.className === "topnav") {
+          x.className += " responsive";
+        } else {
+          x.className = "topnav";
+        }
+      }
+    </script>
+    <script>
+      function openNav() {
+        document.getElementById("mySidenav").style.width = "70px";
+      }
+
+      function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+
+      }
+    </script>
+
+    <!-- <script>
+    $(function(){
+      $("#nav-placeholder").load("sidebar.html");
+    });
+    </script> -->
+    <script type="text/javascript">
+      // function redirect(){
+      //   window.location = "metadataV2.html"; // Redirecting to other page.
+      //        return false;
+      window.onload = function () {
+        document.getElementById("div1").style.display = "block";
+        document.getElementById("div2").style.display = "none";
+        document.getElementById("div3").style.display = "none";
+        document.getElementById("div4").style.display = "none";
+        document.getElementById("div5").style.display = "none";
+        document.getElementById("div11").style.display = "none";
+        document.getElementById("div10").style.display = "none";
+        document.getElementById("div13").style.display = "none";
+      }
+
+      function onLocationSelected() {
+        var source = document.getElementById("source").value;
+        if (source == "Google Drive") {
+          document.getElementById("div1").style.display = "block";
+          document.getElementById("div2").style.display = "none";
+          document.getElementById("div3").style.display = "none";
+          document.getElementById("div4").style.display = "none";
+          document.getElementById("div13").style.display = "none";
+
+        }
+        if (source == "MySql") {
+          document.getElementById("div1").style.display = "none";
+          document.getElementById("div2").style.display = "block";
+          document.getElementById("div3").style.display = "none";
+          document.getElementById("div4").style.display = "none";
+          document.getElementById("div13").style.display = "none";
+
+        }
+        if (source == "Hive") {
+          document.getElementById("div1").style.display = "none";
+          document.getElementById("div2").style.display = "none";
+          document.getElementById("div3").style.display = "block";
+          document.getElementById("div4").style.display = "none";
+          document.getElementById("div13").style.display = "none";
+
+        }
+        if (source == "AzureBlob") {
+          document.getElementById("div1").style.display = "none";
+          document.getElementById("div2").style.display = "none";
+          document.getElementById("div3").style.display = "none";
+          document.getElementById("div4").style.display = "none";
+          document.getElementById("div13").style.display = "block";
+      }
+        if (source == "One Drive") {
+          document.getElementById("div1").style.display = "none";
+          document.getElementById("div2").style.display = "none";
+          document.getElementById("div3").style.display = "none";
+          document.getElementById("div4").style.display = "block";
+          document.getElementById("div13").style.display = "none";
+
+        }
+      }
+
+      function onTargetLocationSelected() {
+        var Target = document.getElementById("Target").value;
+        if (Target == "Azure") {
+          document.getElementById("div6").style.display = "block";
+          document.getElementById("div5").style.display = "none";
+        } else {
+          document.getElementById("div6").style.display = "none";
+          document.getElementById("div5").style.display = "block";
+        }
+      }
+      function onfiletype() {
+        var filetype = document.getElementById("Target filetype").value;
+        if (filetype == "Flatfiles") {
+          document.getElementById("div10").style.display = "block";
+        } else {
+          document.getElementById("div10").style.display = "none";
+        }
+      }
+      function onScheduleSelected() {
+        var Schedule = document.getElementById("Schedule").value;
+        if (Schedule == "Schedule") {
+          document.getElementById("div11").style.display = "block";
+        } else {
+          document.getElementById("div11").style.display = "none";
+        }
+      }
+    </script>
+
+  </header>
+</body>
+
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='metadata.css') }}"> 
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+</head>
+<style>
+  .img1{
+    position: absolute;
+    top: 10px;
+    left: 80px;
+    width: 266px;
+    height: 32px;
+    background: transparent url('static/Group 298.svg');
+    border: 0;
+
+}
+.button1
+{   
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 25px;
+    height: 25px;
+    background: transparent url('static/Shape.png') 0% 0% no-repeat padding-box;
+    opacity: 1;
+    border:none;
+    outline: none;
+}
+.user1{
+    position: absolute;
+    top: 10px;
+    left: 988px;
+    width: 27px;
+    height: 27px;
+    background: transparent url('static/user.svg') 0% 0% no-repeat padding-box;
+    opacity: 1;
+    border:0px ;
+}
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  overflow-x: hidden;
+  transition: 0.2s;
+  padding-top: 60px;
+  box-shadow: 0px 8px 24px #00000029;
+  background: #FFFFFF 0% 0% no-repeat padding-box;
+}
+
+.sidenav a {
+  padding: 7px 8px 8px 25px;
+  font-size: 25px;
+  display: block;
+  transition: 0.3s;
+}
+
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 15px;
+  font-size: 36px;
+  margin-left: 10px;
+}
+#main {
+  position: absolute;
+  top: 0;
+  left: 12px;
+  font-size: 36px;
+  margin-left: 10px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+#table1
+{
+  font: 1em Calibri;
+  border-collapse: collapse;
+  position: relative;
+  top: 10px;
+  left: 12px;
+  right: 5px;
+  width: 98%;
+}
+
+#table1 td, #customers th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#table1 tr:nth-child(even){background-color: #f2f2f2;}
+
+#table1 tr:hover {background-color: #ddd;}
+
+#table1 th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: center;
+  background-color:cornflowerblue;
+  color: white;
+}
+.setuppage{
+    position: absolute;
+    top: 120px;
+    left: 70px;
+    width: 1180px;
+    height: fit-content;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    box-shadow: 0px 3px 6px #00000029;
+    border: 1px solid #E6EAEE;
+    opacity: 1;
+}
+</style>
+<body>
+    
+    <header>
+    <i class = img1></i>
+    <a href="{{ url_for('logout') }}" type="logout" value="logout"><i class = button1></i></a>
+    <i class = user1></i>
+    <h1 style="font: 1.2em Calibri;" id = 'user'>{{account}}</h1>
+    <div id="nav-placeholder">
+      <div id="main">
+        <a class="openbtn" onclick="openNav()"> <img src="static/Shape 1.svg" ></a>    
+    </div>
+    <div id="mySidenav" class="sidenav">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"><img src="static/Shape 1.svg"></a>
+      <a href="{{ url_for('overview') }}"><i class="fas fa-home"></i><img src="static/dashboard-active.svg"></a>
+      <a href="#"><i class="fas fa-home"></i><img src ="static/cog.svg" ></a>
+    
+    </div>
+    
+    </div>
+    <div class="back1"></div>
+    <div class="topnav" id="myTopnav">
+        <a style="font: 1em Calibri;" href="#" >Setup</a>
+        <!-- roll back function need to be enabled here for setup button -->
+        <a style="font: 1em Calibri;" href="#" class="active">Metadata</a>
+        <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+          <i class="fa fa-bars"></i>
+        </a>
+      </div>
+      <div class="metadatapage">
+      <div class="setuppage">
+      <form action="#" method="post" >      
+        <table name = "table1" id = "table1">
+          <tr>
+              {% for col in column_names %}
+              <th>{{col}}</th>
+              
+              {% endfor %}
+              <!--th>Column_description</th-->
+          </tr>
+          {% for row in row_data %}
+          <tr>
+              {% for col, row_ in zip(column_names, row) %}
+              {% if col == link_column %}
+              {% else %}
+              <td>{{row_}}</td>
+              {% endif %}
+              {% endfor %}
+              </tr>
+          
+          {% endfor %}
+      
+      </table>
+      <p style="font: 1em Calibri;" >File Already Exists : {{value}} </p>
+      <!-- <input type="text" id="nn" value="{{value}}">File Already exists:</input> -->
+      <!-- <input type="submit" class="button" value="Validate the Metadata" id="btnSubmit" style=" margin-top: 1rem; width: auto; text-align: right;">  -->
+      </form>
+      <input  class="button" id="button" href="#" type= "submit" value="Ingest Data" style="margin-top: 10px ; margin-left: 500px;
+      width: 150px;
+      height: 40px;
+      background: cornflowerblue 0% 0% no-repeat padding-box;
+      border-radius: 8px;
+      opacity: 1;
+      text-align: center;
+      font: 1em Calibri;
+      letter-spacing: 0px;
+      color: #FFFFFF;
+      opacity: 1;"></input>     
+      <a href="{{ url_for('Rollbackmetadata') }}" ><input class="button" type="submit" value="Cancel" style="margin-top: 10px ; margin-left: 500px;
+        width: 150px;
+        height: 40px;
+        background: cornflowerblue 0% 0% no-repeat padding-box;
+        border-radius: 8px;
+        opacity: 1;
+        text-align: center;
+        font: 1em Calibri;
+        letter-spacing: 0px;
+        color: #FFFFFF;
+        opacity: 1;"></input></a>    
+     <div class="popup">
+      <div class="popup-content">
+        <img src="{{ url_for('static', filename='close.jpg') }}" alt="close" class="close">
+        <p style="font: 1em Calibri;" >The File Already exists in DataBase.</p>
+        <p style="font: 1em Calibri;" >Do you want to Append  or Overwrite it ?</p>
+        <br><br>
+        <a href="{{ url_for('append') }}" class="button"><input id="append" class="button" type="submit" value="Append" style="width: 150px;height: 40px; background: cornflowerblue 0% 0% no-repeat padding-box; border-radius: 8px; opacity: 1;text-align: center;
+          font: 1em Calibri;
+            letter-spacing: 0px;
+            color: #FFFFFF;
+            opacity: 1;"  ></input></a>
+        <a href="{{ url_for('replace') }}" class="button"><input class="button" type="submit" value="Overwrite" style="width: 150px;height: 40px; background: cornflowerblue 0% 0% no-repeat padding-box; border-radius: 8px; opacity: 1;text-align: center;
+        font: 1em Calibri;
+          letter-spacing: 0px;
+          color: #FFFFFF;
+          opacity: 1;" ></input></a>
+      </div>
+
+    </div>
+    </div>
+  </div>
+  <script>
+    document.getElementById("button").addEventListener("click",function(){
+      var file_e= '{{value}}'
+
+      if (file_e=='NO'){
+        location.href = "{{ url_for('index2') }}" ;
+      }
+      if (file_e=='YES'){
+        document.querySelector(".popup").style.display ="flex";
+      }
+      if (file_e=='YES, But Metadata is not matching'){
+        document.querySelector(".popup").style.display ="flex";
+        document.getElementById("append").style.display='none';
+
+      }
+     })
+     document.querySelector(".close").addEventListener("click",function(){
+      document.querySelector(".popup").style.display ="none";
+     })
+   </script>
+
+
+      
+    <script>
+        function myFunction() {
+          var x = document.getElementById("myTopnav");
+          if (x.className === "topnav") {
+            x.className += " responsive";
+          } else {
+            x.className = "topnav";
+          }
+        }
+    </script>
+           <script>
+            function openNav() {
+              document.getElementById("mySidenav").style.width = "70px";
+            }
+            
+            function closeNav() {
+              document.getElementById("mySidenav").style.width = "0";
+            
+            }
+            </script>
+         
+    <!-- <script>
+    $(function(){
+      $("#nav-placeholder").load("sidebar.html");
+    });
+    </script> -->
+    </header>
+</body>
+</html>

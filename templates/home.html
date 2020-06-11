@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Home</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='Home.css') }}">
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+</head>
+<style>
+  body {
+    position: relative;
+    top: -1.3458251953125px;
+    left: auto;
+    width: auto;
+    height: 50px;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    box-shadow: 0px 8px 24px #0000000D;
+    opacity: 1;
+  }
+
+  .img1 {
+    position: absolute;
+    top: 10px;
+    left: 80px;
+    width: 266px;
+    height: 32px;
+    background: transparent url('static/Group 298.svg');
+    border: none;
+
+  }
+
+  .button1 {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 25px;
+    height: 25px;
+    background: transparent url('static/Shape.png') 0% 0% no-repeat padding-box;
+    opacity: 1;
+    border: none;
+    outline: none;
+    z-index: -1px;
+  }
+
+  .user1 {
+    position: absolute;
+    top: 10px;
+    left: 988px;
+    width: 27px;
+    height: 27px;
+    background: transparent url('static/user.svg') 0% 0% no-repeat padding-box;
+    opacity: 1;
+    border: 0px;
+  }
+
+  #client {
+    position: absolute;
+    top: 142px;
+    left: 106px;
+    width: 380px;
+    height: 83px;
+    background: transparent url('static/Group 267.png') 0% 0% no-repeat padding-box;
+    opacity: 1;
+    box-shadow: 0px 8px 10px #0000000D;
+  }
+
+  .hand-shake {
+    position: relative;
+    top: 127px;
+    left: 450px;
+    width: 24px;
+    height: 14px;
+    background: transparent url('static/hand-shake.svg') 0% 0% no-repeat padding-box;
+    opacity: 1;
+  }
+
+  .group5 {
+    position: relative;
+    top: 142px;
+    left: 526px;
+    width: 393px;
+    height: 83px;
+    background: transparent url('static/Group 5.svg') 0% 0% no-repeat padding-box;
+    opacity: 1;
+  }
+
+  .sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    overflow-x: hidden;
+    transition: 0.2s;
+    padding-top: 60px;
+    box-shadow: 0px 8px 24px #00000029;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+  }
+
+  .sidenav a {
+    padding: 7px 8px 8px 25px;
+    font-size: 25px;
+    display: block;
+    transition: 0.3s;
+  }
+
+
+  .sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 15px;
+    font-size: 36px;
+    margin-left: 10px;
+  }
+
+  #main {
+    position: absolute;
+    top: 0;
+    left: 12px;
+    font-size: 36px;
+    margin-left: 10px;
+  }
+
+  @media screen and (max-height: 450px) {
+    .sidenav {
+      padding-top: 15px;
+    }
+
+    .sidenav a {
+      font-size: 18px;
+    }
+  }
+#table1
+{
+  font: 1em Calibri;
+  border-collapse: collapse;
+  position: relative;
+  top: 0px;
+  left: 12px;
+  right: 5px;
+  width: 98%;
+}
+
+#table1 td, #table1 th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#table1 tr:nth-child(even){background-color: #f2f2f2;}
+
+#table1 tr:hover {background-color: #ddd;}
+
+#table1 th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: center;
+  background-color:cornflowerblue;
+  color: white;
+}
+.setuppage{
+    position: absolute;
+    top: 70px;
+    left: 0px;
+    width: 1200px;
+    height: fit-content;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    box-shadow: 0px 3px 6px #00000029;
+    border: 1px solid #E6EAEE;
+    opacity: 1;
+    margin-bottom: 100px;
+}
+#table4 {
+    font: 1em Calibri;
+    border-collapse: collapse;
+    position: relative;
+    top: 0px;
+    left: 12px;
+    right: 5px;
+    width: 98%;
+  }
+
+  #table4 td,
+  #customers th {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+
+  #table4 tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+  #table4 tr:hover {
+    background-color: #ddd;
+  }
+
+  #table4 th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: center;
+    background-color: cornflowerblue;
+    color: white;
+  }
+
+</style>
+
+<body>
+  <header>
+    <i class=img1></i>
+    <a href="{{ url_for('logout') }}" type="logout" value="logout"><i class = button1></i></a>
+    <i class=user1></i>
+    <h1 style=" font: 1.2em Calibri;" id='user'>{{ account }}</h1>
+    <div id="nav-placeholder">
+      <div id="main">
+        <a class="openbtn" onclick="openNav()"> <img src="static/Shape 1.svg"></a>
+      </div>
+      <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"><img src="static/Shape 1.svg"></a>
+        <a href="{{ url_for('overview') }}" title="Ingestdata"><i class="fas fa-home"></i><img
+            src="static/dashboard-active.svg"></a>
+        <a href="#" title="Setting"><i class="fas fa-home"></i><img src="static/cog.svg"></a>
+
+      </div>
+
+
+    </div>
+    <div id="client100">
+      <p style=" font: 1em Calibri;" >{{ clients }} clients</p>
+      <span>
+        <img src="static/hand-shake@2x.png" style="width:10%">
+      </span>
+    </div>
+    <div id="client101">
+      <p style=" font: 1em Calibri;" >{{Project}} Projects</p>
+      <span>
+        <img src="static/business-affiliate-network@2x.png" style="width:8%">
+      </span>
+    </div>
+    <div id="client102">
+      <p style=" font: 1em Calibri;" >{{Owner}} Data Owner</p>
+      <img src="static/signing-the-contract@2x.png" style="width:7%; ">
+    </div>
+    <div class="searchbar">
+      <form action="{{ url_for('homeSearch') }}" method="post">
+        <input type="search" id="search" placeholder="search projects here.." name = "search"
+          style="width: 800px; height: 30px; border: none; font: 1em Calibri;" >
+        <button type="submit" id="search button" value="Search" href="{{ url_for('homeSearch') }}"
+          style="height: 30px; background-color:cornflowerblue; font: 1em Calibri;" >Search Projects</button>
+          <div class="setuppage">
+            <div id="table2">
+              <p id="activeruns" style="font: 1.3em Calibri; margin-left: 12px;">Active Runs</p>
+                <table id="table1" class="table1" >
+                  <tr>
+                      {% for col in column_names %}
+                      <th>{{col}}</th>
+                      
+                      {% endfor %}
+                      
+                  </tr>
+                  {% for row in row_data %}
+                  <tr>
+                      {% for col, row_ in zip(column_names, row) %}
+                      {% if col == link_column %}
+                      {% else %}
+                      <td>{{row_}}</td>
+                      {% endif %}
+                      {% endfor %}
+                  </tr>
+                  {% endfor %}
+              
+              </table>
+            </div>
+            <p style="font: 1em Calibri; margin-left: 10px;" ></p>
+            
+          <div id="table3">
+            <table id="table4" class="table4">
+              <p id="pastruns" style="font: 1.3em Calibri;margin-left: 10px;">Past Runs</p>
+              <tr>
+                {% for col1 in column_names1 %}
+                <th>{{col1}}</th>
+
+                {% endfor %}
+
+              </tr>
+              {% for row1 in row_data1 %}
+              <tr>
+                {% for col1, row_1 in zip1(column_names1, row1) %}
+                {% if col1 == link_column %}
+                {% else %}
+                <td>{{row_1}}</td>
+                {% endif %}
+                {% endfor %}
+              </tr>
+              {% endfor %}
+
+            </table>
+          </div>
+          <p style="font: 1em Calibri;"></p>
+          </div>
+        </form>
+    </div>
+    <script>
+      function openNav() {
+        document.getElementById("mySidenav").style.width = "70px";
+      }
+
+      function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+
+      }
+    </script>
+ <script type="text/javascript">
+  window.onload = function () {
+  var random_msg= '{{value}}'
+
+if (random_msg=='NO'){
+ 
+    document.getElementById("pastruns").style.display = "none";
+  }
+  if (random_msg=='YES'){
+ 
+ document.getElementById("pastruns").style.display = "block";
+}
+
+  }
+</script>
+
+  
+  </header>
+</body>
+
+</html>

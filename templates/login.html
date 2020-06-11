@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style1.css') }}"> 
+</head>
+<style>
+    body {
+    background-image: url('static/MaskGroup1.png');
+    background-size: cover;
+    background-attachment: fixed;
+    opacity: 1;
+}
+
+</style>
+<body>
+    <form action="{{ url_for('login') }}" method="post">
+    <h1 style=" font: 2.5em Calibri;" id= login >Login</h1>
+    <h2 style=" font: 1em Calibri;" id= h2>Welcome back! Please login to your account</h2>
+    <input id = username name="username" type="text" placeholder="Username" required style=" font: 1em Calibri;" >
+    <input id = password name="password" type="password" placeholder="Password" required style=" font: 1em Calibri;" >
+    <div class="msg" style=" font: 1em Calibri;" >{{ msg }}</div>
+    <button id = login1 value="Login" type="submit" style=" font: 1em Calibri;" >Login</button>
+</form>
+</body>
+</html>
+

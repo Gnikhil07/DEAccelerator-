@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  font-family: "Lato", sans-serif;
+}
+
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  overflow-x: hidden;
+  transition: 0.2s;
+  padding-top: 60px;
+  box-shadow: 0px 8px 24px #00000029;
+  background: #FFFFFF 0% 0% no-repeat padding-box;
+}
+
+.sidenav a {
+  padding: 7px 8px 8px 25px;
+  font-size: 25px;
+  display: block;
+  transition: 0.3s;
+}
+
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 15px;
+  font-size: 36px;
+  margin-left: 10px;
+}
+#main {
+  position: absolute;
+  top: 0;
+  left: 12px;
+  font-size: 36px;
+  margin-left: 10px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+</style>
+</head>
+<body>
+
+<div id="main">
+    <a class="openbtn" onclick="openNav()"> <img src="static/Shape 1.svg" ></a>    
+</div>
+<div id="mySidenav" class="sidenav">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"><img src="static/Shape 1.svg"></a>
+  <a href="setup.html"><i class="fas fa-home"></i><img src="static/dashboard-active.svg"></a>
+  <a href="#"><i class="fas fa-home"></i><img src ="static/cog.svg" ></a>
+
+</div>
+
+<script>
+function openNav() {
+  document.getElementById("mySidenav").style.width = "70px";
+}
+
+function closeNav() {
+  document.getElementById("mySidenav").style.width = "0";
+
+}
+</script>
+   
+</body>
+</html> 
