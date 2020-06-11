@@ -213,6 +213,13 @@ button {
       <form action="{{ url_for('index1') }}" method="post" id = "form1">      
   <div class="setuppage">
     <div id="table2">
+      <datalist id="mylist">
+        <option value="%d-%m-%Y">
+        <option value="%d-%b-%Y">
+        <option value="%Y-%b-%d">
+          <option value="%Y-%m-%d">
+            <option value="%d-%m-%y %H:%M:%S">
+     </datalist>
         <table id="table1" class="table1" >
           <tr>
               {% for col in column_names %}
@@ -250,7 +257,7 @@ button {
                 <option >Tier 3</option>
               </select></td>
               <td><input type="text" id="Default" name="Default" ></td>
-              <td><input type="text" id="DateFormat" name="Date Format" placeholder="%a-%b-%c"></td>
+              <td><input type="search" list="mylist" name = "Date Format" id = "DateFormat"></td>
             <td><input type="text" id="Description" name="Description" ></td>
           </tr>
           {% endfor %}
