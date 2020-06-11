@@ -95,14 +95,14 @@ def home():
         #active runs
         cursor.execute(" select ProjectName, JobName , StartTime ,Status  from audittable WHERE UserName=%s AND Status=%s order by EntryID desc limit 5;",(account,'Running'))
         data = cursor.fetchall() 
-        df = pd.DataFrame(data, columns=['ProjectName','JobName', 'StartTime','Status'])
+        df = pd.DataFrame(data, columns=['Project Name','Job Name', 'Start Time','Status'])
         #past runs
         cursor.execute(" select *  from audittable   WHERE  UserName=%s AND Status!=%s order by EntryID desc limit 5; ",(account,'Running'))
         data1 = cursor.fetchall() 
-        df2 = pd.DataFrame(data1, columns=[ 'EntryID','JobName', 'ProjectName', 'StartTime', 'EndTime', 'UserName', 'TotalRows', 'DuplicateRows', 'DuplicatePrimaryKey', 'DQCheckFailed', 'Status', 'RelativeFilePath'])
+        df2 = pd.DataFrame(data1, columns=[ 'EntryID','Job Name', 'Project Name', 'Start Time', 'End Time', 'UserName', 'Total Rows', 'Ingested Rows', 'Duplicate Primary Key', 'DQ Check Failed', 'Status', 'Relative File Path'])
         #df2 = pd.DataFrame(data1, columns=['JobName','RunID' ,'StartTime' ,'EndTime','UserName' ,'TotalRows' ,'DuplicateRows','DuplicatePrimaryKey','DQCheckFailed','Status','RelativeFilePath','ProjectName'])
         df3=  df2.drop(['UserName','EntryID'], axis = 1)
-        columns_order=[ 'ProjectName','JobName', 'StartTime', 'EndTime', 'TotalRows', 'DuplicateRows', 'DuplicatePrimaryKey', 'DQCheckFailed', 'Status', 'RelativeFilePath']
+        columns_order=[ 'Project Name','Job Name', 'Start Time', 'End Time', 'Total Rows', 'Ingested Rows', 'Duplicate Primary Key', 'DQ Check Failed', 'Status', 'Relative File Path']
         df4 = df3.reindex(columns=columns_order)
         # Show the profile page with account info
         return render_template('home.html',column_names=df.columns.values, row_data=list(df.values.tolist()), zip=zip,column_names1=df4.columns.values, row_data1=list(df4.values.tolist()), zip1=zip, account=account, clients = clients, Project = Project,Owner = Owner)
@@ -133,16 +133,16 @@ def homeSearch():
         Owner = Owners[0]  # projectname like needs to updated
         cursor.execute(" select ProjectName, JobName , StartTime ,Status from audittable WHERE  ProjectName LIKE %s AND UserName=%s AND Status='Running' order by EntryID desc limit 5;",(search,account))
         data = cursor.fetchall() 
-        df = pd.DataFrame(data, columns=[ 'ProjectName','JobName', 'StartTime','Status'])
+        df = pd.DataFrame(data, columns=[ 'Projec tName','Job Name', 'Start Time','Status'])
         #df = pd.DataFrame(data, columns=['JobName','RunID' ,'StartTime' ,'EndTime','UserName' ,'TotalRows' ,'DuplicateRows','DuplicatePrimaryKey','DQCheckFailed','Status','RelativeFilePath','ProjectName'])
         #df1=  df.drop(['UserName'], axis = 1)
 
         cursor.execute(" select *  from audittable   WHERE  ProjectName LIKE %s AND UserName=%s AND Status!='Running' order by EntryID desc limit 5;",(search,account))
         data1 = cursor.fetchall() 
-        df2 = pd.DataFrame(data1, columns=[ 'EntryID','JobName', 'ProjectName', 'StartTime', 'EndTime', 'UserName', 'TotalRows', 'DuplicateRows', 'DuplicatePrimaryKey', 'DQCheckFailed', 'Status', 'RelativeFilePath'])
+        df2 = pd.DataFrame(data1, columns=[ 'EntryID','Job Name', 'Project Name', 'Start Time', 'End Time', 'UserName', 'Total Rows', 'Ingested Rows', 'Duplicate Primary Key', 'DQ Check Failed', 'Status', 'Relative File Path'])
         #df2 = pd.DataFrame(data1, columns=['JobName','RunID' ,'StartTime' ,'EndTime','UserName' ,'TotalRows' ,'DuplicateRows','DuplicatePrimaryKey','DQCheckFailed','Status','RelativeFilePath','ProjectName'])
         df3=  df2.drop(['UserName','EntryID'], axis = 1)
-        columns_order=[ 'ProjectName','JobName', 'StartTime', 'EndTime', 'TotalRows', 'DuplicateRows', 'DuplicatePrimaryKey', 'DQCheckFailed', 'Status', 'RelativeFilePath']
+        columns_order=[ 'Project Name','Job Name', 'Start Time', 'End Time', 'Total Rows', 'Ingested Rows', 'Duplicate Primary Key', 'DQ Check Failed', 'Status', 'Relative File Path']
         df4 = df3.reindex(columns=columns_order)
         mydb.commit()
         cursor.close()
@@ -258,6 +258,7 @@ def hive_metadata_1():
     a = eval(response.text)
     b=a['run_id']
     session['b']=b
+    time.sleep(8.0)
     return redirect(url_for('hive_metadata_2'))   
 
 
