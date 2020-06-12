@@ -239,7 +239,7 @@ button {
               {% for col, row_ in zip(column_names, row) %}
               {% if col == link_column %}
               {% else %}
-              <td><input type="text" id="{{col}}" name="{{col}}" value={{row_}}></td>
+              <td><input type="text" id="{{col}}" name="{{col}}" value="{{row_}}"></td>
               {% endif %}
               {% endfor %}
               <td><select class="form-control" name = "PrimaryKey" id = "PrimaryKey">
