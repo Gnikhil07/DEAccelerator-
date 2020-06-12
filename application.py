@@ -99,10 +99,10 @@ def home():
         #past runs
         cursor.execute(" select *  from audittable   WHERE  UserName=%s AND Status!=%s order by EntryID desc limit 5; ",(account,'Running'))
         data1 = cursor.fetchall() 
-        df2 = pd.DataFrame(data1, columns=[ 'EntryID','Job Name', 'Project Name', 'Start Time', 'End Time', 'UserName', 'Total Rows', 'Ingested Rows', 'Duplicate Primary Key', 'DQ Check Failed', 'Status', 'Relative File Path'])
+        df2 = pd.DataFrame(data1, columns=[ 'EntryID','Job Name', 'Project Name', 'Start Time', 'End Time', 'UserName', 'Total Rows', 'Ingested Rows', 'Duplicate Records', 'DQ Check Failed','Rejected Rows', 'Status', 'Relative File Path'])
         #df2 = pd.DataFrame(data1, columns=['JobName','RunID' ,'StartTime' ,'EndTime','UserName' ,'TotalRows' ,'DuplicateRows','DuplicatePrimaryKey','DQCheckFailed','Status','RelativeFilePath','ProjectName'])
         df3=  df2.drop(['UserName','EntryID'], axis = 1)
-        columns_order=[ 'Project Name','Job Name', 'Start Time', 'End Time', 'Total Rows', 'Ingested Rows', 'Duplicate Primary Key', 'DQ Check Failed', 'Status', 'Relative File Path']
+        columns_order=[ 'Project Name','Job Name', 'Start Time', 'End Time', 'Total Rows', 'Ingested Rows', 'Duplicate Records', 'DQ Check Failed','Rejected Rows', 'Status', 'Relative File Path']
         df4 = df3.reindex(columns=columns_order)
         # Show the profile page with account info
         return render_template('home.html',column_names=df.columns.values, row_data=list(df.values.tolist()), zip=zip,column_names1=df4.columns.values, row_data1=list(df4.values.tolist()), zip1=zip, account=account, clients = clients, Project = Project,Owner = Owner)
@@ -139,10 +139,10 @@ def homeSearch():
 
         cursor.execute(" select *  from audittable   WHERE  ProjectName LIKE %s AND UserName=%s AND Status!='Running' order by EntryID desc limit 5;",(search,account))
         data1 = cursor.fetchall() 
-        df2 = pd.DataFrame(data1, columns=[ 'EntryID','Job Name', 'Project Name', 'Start Time', 'End Time', 'UserName', 'Total Rows', 'Ingested Rows', 'Duplicate Primary Key', 'DQ Check Failed', 'Status', 'Relative File Path'])
+        df2 = pd.DataFrame(data1, columns=[ 'EntryID','Job Name', 'Project Name', 'Start Time', 'End Time', 'UserName', 'Total Rows', 'Ingested Rows', 'Duplicate Records', 'DQ Check Failed','Rejected Rows', 'Status', 'Relative File Path'])
         #df2 = pd.DataFrame(data1, columns=['JobName','RunID' ,'StartTime' ,'EndTime','UserName' ,'TotalRows' ,'DuplicateRows','DuplicatePrimaryKey','DQCheckFailed','Status','RelativeFilePath','ProjectName'])
         df3=  df2.drop(['UserName','EntryID'], axis = 1)
-        columns_order=[ 'Project Name','Job Name', 'Start Time', 'End Time', 'Total Rows', 'Ingested Rows', 'Duplicate Primary Key', 'DQ Check Failed', 'Status', 'Relative File Path']
+        columns_order=[ 'Project Name','Job Name', 'Start Time', 'End Time', 'Total Rows', 'Ingested Rows', 'Duplicate Records', 'DQ Check Failed','Rejected Rows', 'Status', 'Relative File Path']
         df4 = df3.reindex(columns=columns_order)
         mydb.commit()
         cursor.close()
