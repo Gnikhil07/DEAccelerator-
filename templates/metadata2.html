@@ -156,17 +156,13 @@
           <tr>
               {% for col in column_names %}
               <th>{{col}}</th>
-              
               {% endfor %}
               <!--th>Column_description</th-->
           </tr>
           {% for row in row_data %}
           <tr>
               {% for col, row_ in zip(column_names, row) %}
-              {% if col == link_column %}
-              {% else %}
               <td>{{row_}}</td>
-              {% endif %}
               {% endfor %}
               </tr>
           
@@ -177,7 +173,7 @@
       <!-- <input type="text" id="nn" value="{{value}}">File Already exists:</input> -->
       <!-- <input type="submit" class="button" value="Validate the Metadata" id="btnSubmit" style=" margin-top: 1rem; width: auto; text-align: right;">  -->
       </form>
-      <input  class="button" id="button" href="#" type= "submit" value="Ingest Data" style="margin-top: 10px ; margin-left: 500px;
+        <a href="{{ url_for('rules') }}"><input type="submit" class="button" value="Next" id="next" style="margin-top: 10px ; margin-left: 500px;
       width: 150px;
       height: 40px;
       background: cornflowerblue 0% 0% no-repeat padding-box;
@@ -187,7 +183,7 @@
       font: 1em Calibri;
       letter-spacing: 0px;
       color: #FFFFFF;
-      opacity: 1;"></input>     
+      opacity: 1;" /></a>     
       <a href="{{ url_for('Rollbackmetadata') }}" ><input class="button" type="submit" value="Cancel" style="margin-top: 10px ; margin-left: 500px;
         width: 150px;
         height: 40px;
@@ -199,48 +195,10 @@
         letter-spacing: 0px;
         color: #FFFFFF;
         opacity: 1;"></input></a>    
-     <div class="popup">
-      <div class="popup-content">
-        <img src="{{ url_for('static', filename='close.jpg') }}" alt="close" class="close">
-        <p style="font: 1em Calibri;" >The File Already exists in DataBase.</p>
-        <p style="font: 1em Calibri;" >Do you want to Append  or Overwrite it ?</p>
-        <br><br>
-        <a href="{{ url_for('append') }}" class="button"><input id="append" class="button" type="submit" value="Append" style="width: 150px;height: 40px; background: cornflowerblue 0% 0% no-repeat padding-box; border-radius: 8px; opacity: 1;text-align: center;
-          font: 1em Calibri;
-            letter-spacing: 0px;
-            color: #FFFFFF;
-            opacity: 1;"  ></input></a>
-        <a href="{{ url_for('replace') }}" class="button"><input class="button" type="submit" value="Overwrite" style="width: 150px;height: 40px; background: cornflowerblue 0% 0% no-repeat padding-box; border-radius: 8px; opacity: 1;text-align: center;
-        font: 1em Calibri;
-          letter-spacing: 0px;
-          color: #FFFFFF;
-          opacity: 1;" ></input></a>
-      </div>
-
-    </div>
+    
     </div>
   </div>
-  <script>
-    document.getElementById("button").addEventListener("click",function(){
-      var file_e= '{{value}}'
-
-      if (file_e=='NO'){
-        location.href = "{{ url_for('index2') }}" ;
-      }
-      if (file_e=='YES'){
-        document.querySelector(".popup").style.display ="flex";
-      }
-      if (file_e=='YES, But Metadata is not matching'){
-        document.querySelector(".popup").style.display ="flex";
-        document.getElementById("append").style.display='none';
-
-      }
-     })
-     document.querySelector(".close").addEventListener("click",function(){
-      document.querySelector(".popup").style.display ="none";
-     })
-   </script>
-
+  
 
       
     <script>

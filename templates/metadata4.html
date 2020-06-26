@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Metadata</title>
+    <title>Home</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='metadata.css') }}"> 
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 </head>
@@ -82,49 +82,6 @@
   .sidenav {padding-top: 15px;}
   .sidenav a {font-size: 18px;}
 }
-input, 
-textarea {
- /* To make sure that all text fields have the same font settings
- By default, textareas have a monospace font */
- font: 1em Calibri;
- 
- /* Uniform text field size */
- width: 100px;
- 
- /* Match form field borders */
- border: 1px solid #999;
-}
- 
-input:focus, 
-textarea:focus {
- /* Additional highlight for focused elements */
- border-color: #000;
- font: 1em Calibri;
-}
- 
-textarea {
- /* Align multiline text fields with their labels */
- vertical-align: top;
- 
- /* Provide space to type some text */
- height: 5em;
-}
- 
-button {
- /* Align buttons with the text fields */
- padding-left: 10px; /* same size as the label elements */
- font: 1em Calibri;
-}
- 
-button {
- /* This extra margin represent roughly the same space as the space
- between the labels and their text fields */
- margin-left: 100em;
- font: 1em Calibri;
-}
-
-
-
 #table1
 {
   font: 1em Calibri;
@@ -133,8 +90,7 @@ button {
   top: 10px;
   left: 12px;
   right: 5px;
-  width: 97%;
-  zoom : 87%
+  width: 98%;
 }
 
 #table1 td, #table1 th {
@@ -153,23 +109,6 @@ button {
   background-color:cornflowerblue;
   color: white;
 }
-
-#PrimaryKey, #DQCheck, #Nullable, #Default {
-  font: 1em Calibri;
-         
-         /* Uniform text field size */
-         width: 100px;
-         
-         /* Match form field borders */
-         border: 1px solid #999;
-
-}
-
-/* tr:nth-child(even) {
-  background-color: #dddddd;
-
-} */
-
 .setuppage{
     position: absolute;
     top: 120px;
@@ -199,11 +138,11 @@ button {
       <a href="#"><i class="fas fa-home"></i><img src ="static/cog.svg" ></a>
     
     </div>
-   
+    
     </div>
     <div class="back1"></div>
     <div class="topnav" id="myTopnav">
-        <a style="font: 1em Calibri;" href="#" >Setup</a>    
+        <a style="font: 1em Calibri;" href="#" >Setup</a>
         <!-- roll back function need to be enabled here for setup button -->
         <a style="font: 1em Calibri;" href="#" class="active">Metadata</a>
         <a href="javascript:void(0);" class="icon" onclick="myFunction()">
@@ -211,61 +150,30 @@ button {
         </a>
       </div>
       <div class="metadatapage">
-      <form action="{{ url_for('index1') }}" method="post" id = "form1">      
-  <div class="setuppage">
-    <div id="table2">
-      <datalist id="mylist">
-        <option value="%d-%m-%Y">
-        <option value="%d-%b-%Y">
-        <option value="%Y-%b-%d">
-          <option value="%Y-%m-%d">
-            <option value="%d-%m-%y %H:%M:%S">
-     </datalist>
-        <table id="table1" class="table1" >
+      <div class="setuppage">
+      <form action="#" method="post" >      
+        <table name = "table1" id = "table1">
           <tr>
-              {% for col in (0,1,2) %}
-              <th>{{column_names[col]}}</th>
+              {% for col in column_names %}
+              <th>{{col}}</th>
               {% endfor %}
-              <th>Primary Key</th>
-              <th>Nullable</th>
-              <th>DQ Check</th>
-              <th>Default</th>
-              <th>Date Format</th>
-              {% for col in (3,4,5) %}
-              <th>{{column_names[col]}}</th>
-              {% endfor %}
+              <!--th>Column_description</th-->
           </tr>
           {% for row in row_data %}
           <tr>
-              {% for col, row_ in zip(column_names[:3], row[:3]) %}
-              <td><input type="text" id="{{col}}" name="{{col}}" value="{{row_}}"></td>
+              {% for col, row_ in zip(column_names, row) %}
+              <td>{{row_}}</td>
               {% endfor %}
-              <td><select class="form-control" name = "PrimaryKey" id = "PrimaryKey">
-                <option>Yes</option>
-                <option selected>No</option>
-              </select></td>
-              <td><select class="form-control" name = "Nullable" id = "Nullable">
-                <option selected>Yes</option>
-                <option >No</option>
-              </select></td>
-              <td><select class="form-control" name = "DQ Check" id = "DQCheck">
-                <option selected>No</option>
-                <option >Tier 1</option>
-                <option >Tier 2</option>
-                <option >Tier 3</option>
-              </select></td>
-              <td><input type="text" id="Default" name="Default" ></td>
-              <td><input type="search" list="mylist" name = "Date Format" id = "DateFormat"></td>
-              {% for col, row_ in zip(column_names[3:], row[3:]) %}
-              <td><input type="text" id="{{col}}" name="{{col}}" value="{{row_}}"></td>
-              {% endfor %}
-          </tr>
+              </tr>
+          
           {% endfor %}
       
       </table>
-    </div>
-      <p style="font: 1em Calibri;" >File Already Exists : {{value}}  </p>
-      <input type="submit" class="button" value="Validate the Metadata" id="btnSubmit" style="margin-top: 10px ; margin-left: 500px;
+      <p style="font: 1em Calibri;" >File Already Exists : {{value}} </p>
+      <!-- <input type="text" id="nn" value="{{value}}">File Already exists:</input> -->
+      <!-- <input type="submit" class="button" value="Validate the Metadata" id="btnSubmit" style=" margin-top: 1rem; width: auto; text-align: right;">  -->
+      </form>
+      <input  class="button" id="button" href="#" type= "submit" value="Ingest Data" style="margin-top: 10px ; margin-left: 500px;
       width: 150px;
       height: 40px;
       background: cornflowerblue 0% 0% no-repeat padding-box;
@@ -275,31 +183,59 @@ button {
       font: 1em Calibri;
       letter-spacing: 0px;
       color: #FFFFFF;
-      opacity: 1;"> 
-      </form>
+      opacity: 1;"></input>     
+      <a href="{{ url_for('Rollbackbusinessmetadata') }}" ><input class="button" type="submit" value="Cancel" style="margin-top: 10px ; margin-left: 500px;
+        width: 150px;
+        height: 40px;
+        background: cornflowerblue 0% 0% no-repeat padding-box;
+        border-radius: 8px;
+        opacity: 1;
+        text-align: center;
+        font: 1em Calibri;
+        letter-spacing: 0px;
+        color: #FFFFFF;
+        opacity: 1;"></input></a>    
+     <div class="popup">
+      <div class="popup-content">
+        <img src="{{ url_for('static', filename='close.jpg') }}" alt="close" class="close">
+        <p style="font: 1em Calibri;" >The File Already exists in DataBase.</p>
+        <p style="font: 1em Calibri;" >Do you want to Append  or Overwrite it ?</p>
+        <br><br>
+        <a href="{{ url_for('append') }}" class="button"><input id="append" class="button" type="submit" value="Append" style="width: 150px;height: 40px; background: cornflowerblue 0% 0% no-repeat padding-box; border-radius: 8px; opacity: 1;text-align: center;
+          font: 1em Calibri;
+            letter-spacing: 0px;
+            color: #FFFFFF;
+            opacity: 1;"  ></input></a>
+        <a href="{{ url_for('replace') }}" class="button"><input class="button" type="submit" value="Overwrite" style="width: 150px;height: 40px; background: cornflowerblue 0% 0% no-repeat padding-box; border-radius: 8px; opacity: 1;text-align: center;
+        font: 1em Calibri;
+          letter-spacing: 0px;
+          color: #FFFFFF;
+          opacity: 1;" ></input></a>
+      </div>
+
+    </div>
     </div>
   </div>
-    <script>
-      document.getElementById("button").addEventListener("click",function(){
-        var file_e= '{{value}}'
+  <script>
+    document.getElementById("button").addEventListener("click",function(){
+      var file_e= '{{value}}'
 
-        if (file_e=='NO'){
-          location.href = "{{ url_for('index2') }}" ;
-          document.querySelector(".popup").style.display ="none";
-        }
-        if (file_e=='YES'){
-          document.querySelector(".popup").style.display ="flex";
-        }
-        else{
-          document.querySelector(".popup").style.display ="flex";
-          document.getElementById("append").style.display='none';
+      if (file_e=='NO'){
+        location.href = "{{ url_for('index2') }}" ;
+      }
+      if (file_e=='YES'){
+        document.querySelector(".popup").style.display ="flex";
+      }
+      if (file_e=='YES, But Metadata is not matching'){
+        document.querySelector(".popup").style.display ="flex";
+        document.getElementById("append").style.display='none';
 
-        }
-       })
-       document.querySelector(".close").addEventListener("click",function(){
-        document.querySelector(".popup").style.display ="none";
-       })
-     </script>
+      }
+     })
+     document.querySelector(".close").addEventListener("click",function(){
+      document.querySelector(".popup").style.display ="none";
+     })
+   </script>
 
 
       
@@ -313,7 +249,7 @@ button {
           }
         }
     </script>
-          <script>
+           <script>
             function openNav() {
               document.getElementById("mySidenav").style.width = "70px";
             }
