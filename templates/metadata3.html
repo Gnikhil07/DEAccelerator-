@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Metadata</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='metadata.css') }}">
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+</head>
+<style>
+    .multiselect {
+        width: 200px;
+    }
+
+    .selectBox {
+        position: relative;
+    }
+
+    .selectBox select {
+        width: 100%;
+        font-weight: bold;
+    }
+
+    .overSelect {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+    }
+
+    #checkboxes {
+        display: none;
+        border: 1px #dadada solid;
+    }
+
+    #checkboxes label {
+        display: block;
+    }
+
+    #checkboxes label:hover {
+        background-color: #1e90ff;
+    }
+
+    .img1 {
+        position: absolute;
+        top: 10px;
+        left: 80px;
+        width: 266px;
+        height: 32px;
+        background: transparent url('static/Group 298.svg');
+        border: 0;
+
+    }
+
+    .button1 {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 25px;
+        height: 25px;
+        background: transparent url('static/Shape.png') 0% 0% no-repeat padding-box;
+        opacity: 1;
+        border: none;
+        outline: none;
+    }
+
+    .user1 {
+        position: absolute;
+        top: 10px;
+        left: 988px;
+        width: 27px;
+        height: 27px;
+        background: transparent url('static/user.svg') 0% 0% no-repeat padding-box;
+        opacity: 1;
+        border: 0px;
+    }
+
+    .sidenav {
+        height: 100%;
+        width: 0;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        overflow-x: hidden;
+        transition: 0.2s;
+        padding-top: 60px;
+        box-shadow: 0px 8px 24px #00000029;
+        background: #FFFFFF 0% 0% no-repeat padding-box;
+    }
+
+    .sidenav a {
+        padding: 7px 8px 8px 25px;
+        font-size: 25px;
+        display: block;
+        transition: 0.3s;
+    }
+
+
+    .sidenav .closebtn {
+        position: absolute;
+        top: 0;
+        right: 15px;
+        font-size: 36px;
+        margin-left: 10px;
+    }
+
+    #main {
+        position: absolute;
+        top: 0;
+        left: 12px;
+        font-size: 36px;
+        margin-left: 10px;
+    }
+
+    @media screen and (max-height: 450px) {
+        .sidenav {
+            padding-top: 15px;
+        }
+
+        .sidenav a {
+            font-size: 18px;
+        }
+    }
+
+    input,
+    textarea {
+        /* To make sure that all text fields have the same font settings
+ By default, textareas have a monospace font */
+        font: 1em Calibri;
+
+        /* Uniform text field size */
+        width: 100px;
+
+        /* Match form field borders */
+        border: 1px solid #999;
+    }
+
+    input:focus,
+    textarea:focus {
+        /* Additional highlight for focused elements */
+        border-color: #000;
+        font: 1em Calibri;
+    }
+
+    textarea {
+        /* Align multiline text fields with their labels */
+        vertical-align: top;
+
+        /* Provide space to type some text */
+        height: 5em;
+    }
+
+
+
+
+    #table1 {
+        font: 1em Calibri;
+        border-collapse: collapse;
+        position: relative;
+        top: 10px;
+        left: 12px;
+        right: 5px;
+        width: 98%;
+    }
+
+    #table1 td,
+    #table1 th {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
+    #table1 tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    #table1 tr:hover {
+        background-color: #ddd;
+    }
+
+    #table1 th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: center;
+        background-color: cornflowerblue;
+        color: white;
+    }
+
+    #PrimaryKey,
+    #DQCheck,
+    #Nullable,
+    #Default {
+        font: 1em Calibri;
+
+        /* Uniform text field size */
+        width: 100px;
+
+        /* Match form field borders */
+        border: 1px solid #999;
+
+    }
+
+    /* tr:nth-child(even) {
+  background-color: #dddddd;
+
+} */
+
+    .setuppage {
+        position: absolute;
+        top: 120px;
+        left: 70px;
+        width: 1180px;
+        height: fit-content;
+        background: #FFFFFF 0% 0% no-repeat padding-box;
+        box-shadow: 0px 3px 6px #00000029;
+        border: 1px solid #E6EAEE;
+        opacity: 1;
+    }
+
+    .form {
+        /* Center the form on the page */
+        /* Form outline */
+
+        padding: 0em;
+        border-radius: 1em;
+        margin-left: 50px;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin-left: 50px;
+
+    }
+
+    form li+li {
+        margin-top: 0.5em;
+    }
+
+    label {
+        /* Uniform size & alignment */
+        display: table-row-group;
+        width: 100px;
+        text-align: right;
+        font: 1em Calibri;
+        height: fit-content;
+    }
+
+    input,
+    textarea {
+        /* To make sure that all text fields have the same font settings
+    By default, textareas have a monospace font */
+        font: 1em Calibri;
+
+        /* Uniform text field size */
+        width: auto;
+        height: 30px;
+        border: none;
+        border-bottom: 1px solid grey;
+
+        /* Match form field borders */
+        ;
+    }
+
+    input:focus,
+    textarea:focus {
+        /* Additional highlight for focused elements */
+        border-color: #000;
+    }
+
+    textarea {
+        /* Align multiline text fields with their labels */
+        vertical-align: auto;
+
+        /* Provide space to type some text */
+        height: 5em;
+    }
+    #ColumnName {
+    margin-bottom: 20px;
+    width: auto;
+    height: 30px;
+  }
+  #RuleName {
+    margin-bottom: 20px;
+    width: auto;
+    height: 30px;
+  }
+</style>
+
+<body>
+
+    <header>
+        <i class=img1></i>
+        <a href="{{ url_for('logout') }}" type="logout" value="logout"><i class=button1></i></a>
+        <i class=user1></i>
+        <h1 style="font: 1.2em Calibri;" id='user'>{{account}}</h1>
+        <div id="nav-placeholder">
+            <div id="main">
+                <a class="openbtn" onclick="openNav()"> <img src="static/Shape 1.svg"></a>
+            </div>
+            <div id="mySidenav" class="sidenav">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"><img src="static/Shape 1.svg"></a>
+                <a href="{{ url_for('overview') }}"><i class="fas fa-home"></i><img
+                        src="static/dashboard-active.svg"></a>
+                <a href="#"><i class="fas fa-home"></i><img src="static/cog.svg"></a>
+
+            </div>
+
+        </div>
+        <div class="back1"></div>
+        <div class="topnav" id="myTopnav">
+            <a style="font: 1em Calibri;" href="#">Setup</a>
+            <!-- roll back function need to be enabled here for setup button -->
+            <a style="font: 1em Calibri;" href="#" class="active">Metadata</a>
+            <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+                <i class="fa fa-bars"></i>
+            </a>
+        </div>
+        <div class="metadatapage">
+            <form action="{{ url_for('rules01') }}" method="POST" id="form2">
+                <div class="setuppage">
+                    <input type="button" style="margin-top: 10px ; margin-left: 50px;
+                    width: 130px;
+                    height: 35px;
+                    background: cornflowerblue 0% 0% no-repeat padding-box;
+                    border-radius: 2px;
+                    opacity: 1;
+                    text-align: center;
+                    font: 1em Calibri;
+                    letter-spacing: 0px;
+                    color: #FFFFFF;
+                    opacity: 1;" class="add-custom-rule" value="Add Custom Rule" style="width: fit-content;"
+                        onclick="onCustomRuleSelected()">
+                    <div id="div1">
+                        <ul>
+                            <li>
+                                <label for="Rule Name">Rule Name:</label>
+                                <input type="text" id="Rule Name" name="Rule Name">
+                            </li>
+                            <li>
+                                <label for="Rule Definition">Rule Definition:</label>
+                                <input type="text" id="Rule Definition" name="Rule Definition">
+                            </li>
+                            <li>
+                                <label for="Rule Creator">Rule Creator:</label>
+                                <input type="text" id="Rule Creator" name="Rule Creator">
+                            </li>
+                            <li>
+                                <label for="Rule Approver">Rule Approver:</label>
+                                <input type="text" id="Rule Approver" name="Rule Approver">
+                            </li>
+                        </ul>
+
+                        <br>
+                        <input type="submit" style=" margin-left: 50px; margin-top: -10px;
+                        width: 130px;
+                        height: 35px;
+                        background: lightgray 0% 0% no-repeat padding-box;
+                        border-radius: 2px;
+                        opacity: 1;
+                        text-align: center;
+                        font: 1em Calibri;
+                        letter-spacing: 0px;
+                        color: #FFFFFF;
+                        opacity: 1;" name="create" value="Create" />
+                    </div>
+                    <br>
+                    <div class="msg" style=" font: 1em Calibri;">{{ msg }}</div>
+            </form>
+            <form action="{{ url_for('rules1') }}" method="post" id="form1" style="margin-top: 30px">
+                <select id="ColumnName" id= ColumnName method="GET" action="/" style="margin-left: 50px;">
+                    <option SELECTED>ColumnName</option>
+                    {% for data in data %}
+                    <option value="{{data}}">{{data}}</option>"
+                    {% endfor %}
+                </select>
+                <select name="RuleName1" id="RuleName" method="GET" action="/"> 
+                    <option SELECTED>RuleName</option>
+                    {% for data1 in data1 %}
+                    <option value="{{data1}}">{{data1}}</option>"
+                    {% endfor %}
+                </select>
+                <input type="text" id="parameters" placeholder="add parameters to the rule"
+                    style="width: 180px; height: auto;">
+                <input type="button" class="add-row" value="Add Row" style=" margin-left: 50px;
+                    width: 130px;
+                    height: 35px;
+                    background: lightgray 0% 0% no-repeat padding-box;
+                    border-radius: 2px;
+                    opacity: 1;
+                    text-align: center;
+                    font: 1em Calibri;
+                    letter-spacing: 0px;
+                    color: #FFFFFF;
+                    opacity: 1;">
+                <br>
+                <br>
+                <table id="table1" class="table1">
+
+                    <tr>
+                        <th>Select</th>
+                        <th>ColumnName</th>
+                        <th>RuleName</th>
+                        <th>Parameters</th>
+                    </tr>
+
+
+                </table>
+
+                <button type="button" class="delete-row" style="margin-top: 20px ; margin-left: 415px;
+                    width: 150px;
+                    height: 40px;
+                    background: cornflowerblue 0% 0% no-repeat padding-box;
+                    border-radius: 2px;
+                    opacity: 1;
+                    text-align: center;
+                    font: 1em Calibri;
+                    letter-spacing: 0px;
+                    color: #FFFFFF;
+                    opacity: 1;">Delete Row</button>
+                <input type="submit" name="new1" style="
+                    width: 150px;
+                    height: 40px;
+                    background: cornflowerblue 0% 0% no-repeat padding-box;
+                    border-radius: 2px;
+                    opacity: 1;
+                    text-align: center;
+                    font: 1em Calibri;
+                    letter-spacing: 0px;
+                    color: #FFFFFF;
+                    opacity: 1;">
+
+
+
+               
+
+            </form>
+            
+
+            </div>
+        </div>
+        <script>
+            document.getElementById("button").addEventListener("click", function () {
+                var file_e = '{{value}}'
+
+                if (file_e == 'NO') {
+                    location.href = "{{ url_for('index2') }}";
+                }
+                if (file_e == 'YES') {
+                    document.querySelector(".popup").style.display = "flex";
+                }
+                if (file_e == 'YES, But Metadata is not matching') {
+                    document.querySelector(".popup").style.display = "flex";
+                    document.getElementById("append").style.display = 'none';
+
+                }
+            })
+            document.querySelector(".close").addEventListener("click", function () {
+                document.querySelector(".popup").style.display = "none";
+            })
+        </script>
+
+        <script>
+            function myFunction() {
+                var x = document.getElementById("myTopnav");
+                if (x.className === "topnav") {
+                    x.className += " responsive";
+                } else {
+                    x.className = "topnav";
+                }
+            }
+        </script>
+        <script>
+            function openNav() {
+                document.getElementById("mySidenav").style.width = "70px";
+            }
+
+            function closeNav() {
+                document.getElementById("mySidenav").style.width = "0";
+
+            }
+        </script>
+
+
+        <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $(".add-row").click(function () {
+                    var ColumnName = $("#ColumnName").val();
+                    var RuleName = $("#RuleName").val();
+                    var parameters = $("#parameters").val();
+                    var markup =
+                        "<tr><td><input type='checkbox' name='record'></td><td><input type='text' name= 'Cname' id = record1 value='" +
+                        ColumnName +
+                        "'></td><td><input type='text' name = 'Rule' id = record2 value='" + RuleName +
+                        "'></td><td><input type='text' name= 'Para' id = record3 value='" +
+                        parameters + "'></td><tr>";
+                    $("table tbody").append(markup);
+                });
+
+                // Find and remove selected table rows
+                $(".delete-row").click(function () {
+                    $("table tbody").find('input[name="record"]').each(function () {
+                        if ($(this).is(":checked")) {
+                            $(this).parents("tr").remove();
+                        }
+                    });
+                });
+            });
+        </script>
+
+        <script type="text/javascript">
+            var expanded = false;
+
+            function showCheckboxes() {
+                var checkboxes = document.getElementById("checkboxes");
+                if (!expanded) {
+                    checkboxes.style.display = "block";
+                    expanded = true;
+                } else {
+                    checkboxes.style.display = "none";
+                    expanded = false;
+                }
+            }
+        </script>
+        <script type="text/javascript">
+            window.onload = function () {
+                document.getElementById("div1").style.display = "none";
+            }
+
+            function onCustomRuleSelected() {
+                var x = document.getElementById("div1");
+                if (x.style.display === "none") {
+                    x.style.display = "block";
+                } else {
+                    x.style.display = "none";
+                }
+            }
+        </script>
+    </header>
+</body>
+
+</html>
