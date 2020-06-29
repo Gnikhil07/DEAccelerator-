@@ -719,7 +719,7 @@ def rules1():
         df6 = df5.reindex(columns=columns_order)
         df1 = df6.assign(EntryID=session['EntryID'])[['EntryID'] + df6.columns.tolist()]
         df1['RuleName']=df1['RuleName'].map(lambda x: x.replace(" ",""))
-
+ 
         mydb = mysql.connector.connect(host="demetadata.mysql.database.azure.com",user="DEadmin@demetadata",passwd="Tredence@123",database = "deaccelator")
         cursor = mydb.cursor()
         cursor.execute(" SELECT  `Key` FROM userdetails WHERE `UserName`=%s AND `Status`=%s ; ",(session['username'],1))
@@ -729,7 +729,9 @@ def rules1():
         df1.loc[df1.RuleName == 'Encrypt', 'RuleParameters'] = a
         if any(df1.RuleName == "Lookup")==True:
             existing_string = df1[df1['RuleName'] == "Lookup"]['RuleParameters'].iloc[0]
-            df1.loc[df1.RuleName == 'Lookup', 'RuleParameters'] = (existing_string+','+azureblob_parameter_dictionary_string)
+            update_lookup_parameter=(existing_string+','+azureblob_parameter_dictionary_string)
+            print(update_lookup_parameter)
+            #df1.loc[df1.RuleName == 'Lookup', 'RuleParameters'] = (existing_string+','+azureblob_parameter_dictionary_string)
         print(df1)
         cols = "`,`".join([str(i) for i in df1.columns.tolist()])
         for i,row in df1.iterrows():
@@ -741,11 +743,13 @@ def rules1():
         statement = 'select a.`ColumnName`,a.`DataType`,a.`PrimaryKey`,a.`Nullable`,a.`DQCheck`,a.`Default`,a.`Format`,a.`Description`,a.`PII`,a.`PIIType`,b.`Rules` from (select * from `deaccelator`.`metadata` where `EntryID` = %s) as a left join (select `ColumnName`, group_concat(`RuleName`," - " ,`RuleParameters`) as `Rules` from `deaccelator`.`business_rule_metadata` where `EntryID` =%s group by `ColumnName`) as b on a.`ColumnName` = b.`ColumnName`;'%(session['EntryID'],session['EntryID'])
         cursor.execute(statement)
         data1 = cursor.fetchall()
+        cursor.execute('update business_rule_metadata  set RuleParameters=%s where EntryID=%s and RuleName=%s;',(update_lookup_parameter,session['EntryID'],'Lookup'))
         columnlist = ['Column Name','Data Type','Primary Key','Nullable','DQ Check','Default','Format','Description','PII','PII Type','Rules']
         df8 = pd.DataFrame(data1,columns = columnlist)
+        mydb.commit()
         cursor.close()
         return render_template("metadata4.html", column_names=df8.columns.values, row_data=list(df8.values.tolist()), zip=zip,value=session['file exists'])
-
+    
 import requests,json
 
 @app.route('/pythonlogin/metadata4', methods=['GET', 'POST'])
