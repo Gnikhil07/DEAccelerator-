@@ -690,8 +690,6 @@ def rules01():
 
 
 
-
-
 @app.route('/rules1', methods=['GET', 'POST'])
 def rules1():
     if request.method == "POST":
@@ -747,6 +745,8 @@ def rules1():
         mydb.commit()
         cursor.close()
         return render_template("metadata4.html", column_names=df8.columns.values, row_data=list(df8.values.tolist()), zip=zip,value=session['file exists'])
+
+
     
 import requests,json
 
