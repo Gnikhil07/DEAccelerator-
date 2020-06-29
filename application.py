@@ -708,13 +708,13 @@ def rules1():
         session['azure file delimiter']=details['azure file delimiter']
         azureblob_parameter_dictionary={"StorageAccountAccessKey":session['account_key'],"StorageAccountName":session['account_name'],"ContainerName":session['ContainerName'],"Path":session['Blob Name'],"Format":session['azure file format'],"Delimiter":session['azure file delimiter']}
         azureblob_parameter_dictionary_string = str(azureblob_parameter_dictionary)
-        print(azureblob_parameter_dictionary_string)
+    
         df4 = pd.DataFrame(list(zip(ColumnName,RuleName,Parameters)), columns =['Column Name','RuleName','RuleParameters'])
-        print(df4)
+       
         df4['ColumnName']=df4['Column Name'].map(lambda x: x.split("`~`",1)[0])
         df4['Description']=df4['Column Name'].map(lambda x: x.split("`~`",1)[1])
         df5=df4.drop(['Column Name'], axis = 1)
-        print(df5)
+     
         columns_order=['ColumnName','Description','RuleName','RuleParameters']
         df6 = df5.reindex(columns=columns_order)
         df1 = df6.assign(EntryID=session['EntryID'])[['EntryID'] + df6.columns.tolist()]
@@ -725,14 +725,14 @@ def rules1():
         cursor.execute(" SELECT  `Key` FROM userdetails WHERE `UserName`=%s AND `Status`=%s ; ",(session['username'],1))
         data = cursor.fetchone()
         a=data[0]
-        print(data[0])
+       
         df1.loc[df1.RuleName == 'Encrypt', 'RuleParameters'] = a
         if any(df1.RuleName == "Lookup")==True:
             existing_string = df1[df1['RuleName'] == "Lookup"]['RuleParameters'].iloc[0]
             update_lookup_parameter=(existing_string+','+azureblob_parameter_dictionary_string)
-            print(update_lookup_parameter)
+           
             #df1.loc[df1.RuleName == 'Lookup', 'RuleParameters'] = (existing_string+','+azureblob_parameter_dictionary_string)
-        print(df1)
+        
         cols = "`,`".join([str(i) for i in df1.columns.tolist()])
         for i,row in df1.iterrows():
             sql = "INSERT INTO `business_rule_metadata` (`" +cols + "`) VALUES (" + "%s,"*(len(row)-1) + "%s)"
