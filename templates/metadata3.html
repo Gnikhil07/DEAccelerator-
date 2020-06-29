@@ -165,8 +165,17 @@
         left: 12px;
         right: 5px;
         width: 98%;
+        overflow: auto; 
     }
+    .table-wrap {
+    width: 100%;
+    overflow: auto;
+}
 
+    table {
+    table-layout: fixed;
+    width: 200%;
+}
     #table1 td,
     #table1 th {
         border: 1px solid #ddd;
@@ -227,23 +236,26 @@
         padding: 0em;
         border-radius: 1em;
         margin-left: 50px;
+        
     }
 
     ul {
         list-style: none;
         padding: 0;
         margin-left: 50px;
+        
 
     }
 
     form li+li {
         margin-top: 0.5em;
+        
     }
 
     label {
         /* Uniform size & alignment */
-        display: table-row-group;
         width: 100px;
+        display: table-row-group;
         text-align: right;
         font: 1em Calibri;
         height: fit-content;
@@ -278,16 +290,18 @@
         /* Provide space to type some text */
         height: 5em;
     }
+
     #ColumnName {
-    margin-bottom: 20px;
-    width: auto;
-    height: 30px;
-  }
-  #RuleName {
-    margin-bottom: 20px;
-    width: auto;
-    height: 30px;
-  }
+        margin-bottom: 20px;
+        width: auto;
+        height: 30px;
+    }
+
+    #RuleName {
+        margin-bottom: 20px;
+        width: auto;
+        height: 30px;
+    }
 </style>
 
 <body>
@@ -371,20 +385,25 @@
                     <div class="msg" style=" font: 1em Calibri;">{{ msg }}</div>
             </form>
             <form action="{{ url_for('rules1') }}" method="post" id="form1" style="margin-top: 30px">
-                <select id="ColumnName" id= ColumnName method="GET" action="/" style="margin-left: 50px;">
+                <select id="ColumnName" id=ColumnName method="GET" action="/" style="margin-left: 50px;">
                     <option SELECTED>ColumnName</option>
                     {% for data in data %}
                     <option value="{{data}}">{{data}}</option>"
                     {% endfor %}
                 </select>
-                <select name="RuleName1" id="RuleName" method="GET" action="/"> 
+                <select name="RuleName1" id="RuleName" method="GET" action="/" onchange="onRuleSelected()">
                     <option SELECTED>RuleName</option>
                     {% for data1 in data1 %}
                     <option value="{{data1}}">{{data1}}</option>"
                     {% endfor %}
+
                 </select>
-                <input type="text" id="parameters" placeholder="add parameters to the rule"
-                    style="width: 180px; height: auto;">
+               
+                    <input type="text" id="parameters" placeholder="add parameters to the rule"
+                        style="display: inline; width: 180px; height: auto;">
+               
+
+
                 <input type="button" class="add-row" value="Add Row" style=" margin-left: 50px;
                     width: 130px;
                     height: 35px;
@@ -397,6 +416,37 @@
                     color: #FFFFFF;
                     opacity: 1;">
                 <br>
+                                <div id="div11">
+                    <ul>
+                        <li><b>Lookup File Source</b></li>
+                        <li>
+                            <label for="account_name">Account Name:</label>
+                            <input type="text" id="account_name" name="account_name">
+                        </li>
+                        <li>
+                            <label for="account_key">Storage Account Access Key:</label>
+                            <input type="text" id="account_key" name="account_key">
+                        </li>
+                        <li>
+                            <label for="ContainerName">Container Name:</label>
+                            <input type="text" id="ContainerName" name="ContainerName">
+                        </li>
+                        <li>
+                            <label for="Blob Name">Blob Name:</label>
+                            <input type="text" id="Blob Name" name="Blob Name">
+                        </li>
+                        <li>
+                            <label for="azure file format">File Format:</label>
+                            <select id="azure file format" name="azure file format">
+                                <option id="azure file format csv" value="csv">csv</option>
+                            </select>
+                        </li>
+                        <li>
+                            <label for="azure file delimiter">Azure File Delimiter:</label>
+                            <input type="text" id="azure file delimiter" name="azure file delimiter">
+                        </li>
+                    </ul>
+                </div>
                 <br>
                 <table id="table1" class="table1">
 
@@ -435,12 +485,12 @@
 
 
 
-               
+
 
             </form>
-            
 
-            </div>
+
+        </div>
         </div>
         <script>
             document.getElementById("button").addEventListener("click", function () {
@@ -529,6 +579,20 @@
         <script type="text/javascript">
             window.onload = function () {
                 document.getElementById("div1").style.display = "none";
+                document.getElementById("div11").style.display = "none";
+                document.getElementById("div12").style.display = "block";
+            }
+
+            function onRuleSelected() {
+                var RuleName = document.getElementById("RuleName").value;
+                if (RuleName == "Lookup") {
+                    document.getElementById("div11").style.display = "block";
+                    document.getElementById("div12").style.display = "none";
+                } else {
+                    document.getElementById("div11").style.display = "none";
+                    document.getElementById("div12").style.display = "block";
+                }
+
             }
 
             function onCustomRuleSelected() {
