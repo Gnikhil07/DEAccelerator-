@@ -699,7 +699,16 @@ def rules1():
         ColumnName = newform('Cname')
         RuleName = newform('Rule')
         Parameters = newform('Para')
-        print(ColumnName)
+        details = request.form
+        session['account_name']=details['account_name']
+        session['account_key']=details['account_key']
+        session['ContainerName']=details['ContainerName']
+        session['Blob Name']=details['Blob Name']
+        session['azure file format']=details['azure file format']
+        session['azure file delimiter']=details['azure file delimiter']
+        azureblob_parameter_dictionary={"StorageAccountAccessKey":session['account_key'],"StorageAccountName":session['account_name'],"ContainerName":session['ContainerName'],"Path":session['Blob Name'],"Format":session['azure file format'],"Delimiter":session['azure file delimiter']}
+        azureblob_parameter_dictionary_string = str(azureblob_parameter_dictionary)
+        print(azureblob_parameter_dictionary_string)
         df4 = pd.DataFrame(list(zip(ColumnName,RuleName,Parameters)), columns =['Column Name','RuleName','RuleParameters'])
         print(df4)
         df4['ColumnName']=df4['Column Name'].map(lambda x: x.split("`~`",1)[0])
@@ -718,6 +727,9 @@ def rules1():
         a=data[0]
         print(data[0])
         df1.loc[df1.RuleName == 'Encrypt', 'RuleParameters'] = a
+        if any(df1.RuleName == "Lookup")==True:
+            existing_string = df1[df1['RuleName'] == "Lookup"]['RuleParameters'].iloc[0]
+            df1.loc[df1.RuleName == 'Lookup', 'RuleParameters'] = (existing_string+','+azureblob_parameter_dictionary_string)
         print(df1)
         cols = "`,`".join([str(i) for i in df1.columns.tolist()])
         for i,row in df1.iterrows():
