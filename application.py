@@ -708,31 +708,28 @@ def rules1():
         session['azure file delimiter']=details['azure file delimiter']
         azureblob_parameter_dictionary={"StorageAccountAccessKey":session['account_key'],"StorageAccountName":session['account_name'],"ContainerName":session['ContainerName'],"Path":session['Blob Name'],"Format":session['azure file format'],"Delimiter":session['azure file delimiter']}
         azureblob_parameter_dictionary_string = str(azureblob_parameter_dictionary)
-    
+        print(azureblob_parameter_dictionary_string)
         df4 = pd.DataFrame(list(zip(ColumnName,RuleName,Parameters)), columns =['Column Name','RuleName','RuleParameters'])
-       
         df4['ColumnName']=df4['Column Name'].map(lambda x: x.split("`~`",1)[0])
         df4['Description']=df4['Column Name'].map(lambda x: x.split("`~`",1)[1])
         df5=df4.drop(['Column Name'], axis = 1)
-     
         columns_order=['ColumnName','Description','RuleName','RuleParameters']
         df6 = df5.reindex(columns=columns_order)
         df1 = df6.assign(EntryID=session['EntryID'])[['EntryID'] + df6.columns.tolist()]
         df1['RuleName']=df1['RuleName'].map(lambda x: x.replace(" ",""))
- 
+
         mydb = mysql.connector.connect(host="demetadata.mysql.database.azure.com",user="DEadmin@demetadata",passwd="Tredence@123",database = "deaccelator")
         cursor = mydb.cursor()
         cursor.execute(" SELECT  `Key` FROM userdetails WHERE `UserName`=%s AND `Status`=%s ; ",(session['username'],1))
         data = cursor.fetchone()
         a=data[0]
-       
         df1.loc[df1.RuleName == 'Encrypt', 'RuleParameters'] = a
+        #update_lookup_parameter=''
         if any(df1.RuleName == "Lookup")==True:
             existing_string = df1[df1['RuleName'] == "Lookup"]['RuleParameters'].iloc[0]
             update_lookup_parameter=(existing_string+','+azureblob_parameter_dictionary_string)
-           
+            print(update_lookup_parameter)
             #df1.loc[df1.RuleName == 'Lookup', 'RuleParameters'] = (existing_string+','+azureblob_parameter_dictionary_string)
-        
         cols = "`,`".join([str(i) for i in df1.columns.tolist()])
         for i,row in df1.iterrows():
             sql = "INSERT INTO `business_rule_metadata` (`" +cols + "`) VALUES (" + "%s,"*(len(row)-1) + "%s)"
@@ -743,7 +740,8 @@ def rules1():
         statement = 'select a.`ColumnName`,a.`DataType`,a.`PrimaryKey`,a.`Nullable`,a.`DQCheck`,a.`Default`,a.`Format`,a.`Description`,a.`PII`,a.`PIIType`,b.`Rules` from (select * from `deaccelator`.`metadata` where `EntryID` = %s) as a left join (select `ColumnName`, group_concat(`RuleName`," - " ,`RuleParameters`) as `Rules` from `deaccelator`.`business_rule_metadata` where `EntryID` =%s group by `ColumnName`) as b on a.`ColumnName` = b.`ColumnName`;'%(session['EntryID'],session['EntryID'])
         cursor.execute(statement)
         data1 = cursor.fetchall()
-        cursor.execute('update business_rule_metadata  set RuleParameters=%s where EntryID=%s and RuleName=%s;',(update_lookup_parameter,session['EntryID'],'Lookup'))
+        if any(df1.RuleName == "Lookup")==True:
+            cursor.execute('update business_rule_metadata  set RuleParameters=%s where EntryID=%s and RuleName=%s;',(update_lookup_parameter,session['EntryID'],'Lookup'))
         columnlist = ['Column Name','Data Type','Primary Key','Nullable','DQ Check','Default','Format','Description','PII','PII Type','Rules']
         df8 = pd.DataFrame(data1,columns = columnlist)
         mydb.commit()
