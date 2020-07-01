@@ -13,6 +13,11 @@
     .multiselect {
         width: 200px;
     }
+    select{
+        margin-bottom: 20px;
+        width: auto;
+        height: 30px;
+    }
 
     .selectBox {
         position: relative;
@@ -165,17 +170,19 @@
         left: 12px;
         right: 5px;
         width: 98%;
-        overflow: auto; 
+        overflow: auto;
     }
+
     .table-wrap {
-    width: 100%;
-    overflow: auto;
-}
+        width: 100%;
+        overflow: auto;
+    }
 
     table {
-    table-layout: fixed;
-    width: 200%;
-}
+        table-layout: fixed;
+        width: 200%;
+    }
+
     #table1 td,
     #table1 th {
         border: 1px solid #ddd;
@@ -236,20 +243,20 @@
         padding: 0em;
         border-radius: 1em;
         margin-left: 50px;
-        
+
     }
 
     ul {
         list-style: none;
         padding: 0;
         margin-left: 50px;
-        
+
 
     }
 
     form li+li {
         margin-top: 0.5em;
-        
+
     }
 
     label {
@@ -301,6 +308,10 @@
         margin-bottom: 20px;
         width: auto;
         height: 30px;
+    }
+
+    .container>div {
+        display: inline-block;
     }
 </style>
 
@@ -384,39 +395,20 @@
                     <br>
                     <div class="msg" style=" font: 1em Calibri;">{{ msg }}</div>
             </form>
-            <form action="{{ url_for('rules1') }}" method="post" id="form1" style="margin-top: 30px">
-                <select id="ColumnName" id=ColumnName method="GET" action="/" style="margin-left: 50px;">
-                    <option SELECTED>ColumnName</option>
-                    {% for data in data %}
-                    <option value="{{data}}">{{data}}</option>"
-                    {% endfor %}
-                </select>
-                <select name="RuleName1" id="RuleName" method="GET" action="/" onchange="onRuleSelected()">
-                    <option SELECTED>RuleName</option>
-                    {% for data1 in data1 %}
-                    <option value="{{data1}}">{{data1}}</option>"
-                    {% endfor %}
-
-                </select>
-               
-                    <input type="text" id="parameters" placeholder="add parameters to the rule"
-                        style="display: inline; width: 180px; height: auto;">
-               
-
-
-                <input type="button" class="add-row" value="Add Row" style=" margin-left: 50px;
+            <form action="{{ url_for('rules2') }}" method="post" id="form3" style="margin-top: 30px">
+                <input type="button" style="margin-top: 10px ; margin-left: 50px;
                     width: 130px;
                     height: 35px;
-                    background: lightgray 0% 0% no-repeat padding-box;
+                    background: cornflowerblue 0% 0% no-repeat padding-box;
                     border-radius: 2px;
                     opacity: 1;
                     text-align: center;
                     font: 1em Calibri;
                     letter-spacing: 0px;
                     color: #FFFFFF;
-                    opacity: 1;">
-                <br>
-                                <div id="div11">
+                    opacity: 1;" class="add-custom-rule" value="Add Lookup File" style="width: fit-content;"
+                        onclick="onLookupSelected()">
+                <div id="div11">
                     <ul>
                         <li><b>Lookup File Source</b></li>
                         <li>
@@ -446,7 +438,76 @@
                             <input type="text" id="azure file delimiter" name="azure file delimiter">
                         </li>
                     </ul>
+                    <br>
+                    <input type="submit" form = "form3" style=" margin-left: 50px; margin-top: -10px;
+                    width: 130px;
+                    height: 35px;
+                    background: lightgray 0% 0% no-repeat padding-box;
+                    border-radius: 2px;
+                    opacity: 1;
+                    text-align: center;
+                    font: 1em Calibri;
+                    letter-spacing: 0px;
+                    color: #FFFFFF;
+                    opacity: 1;" name="Submit" value="Submit" />
                 </div>
+            </form>
+            <form action="{{ url_for('rules1') }}" method="post" id="form1" style="margin-top: 30px">
+                <div class="container">
+                    <select id="ColumnName" id=ColumnName method="GET" action="/" style="margin-left: 50px;">
+                        <option SELECTED hidden>ColumnName</option>
+                        {% for data in data %}
+                        <option value="{{data}}">{{data}}</option>"
+                        {% endfor %}
+                    </select>
+                    <select name="RuleName1" id="RuleName" method="GET" action="/" onchange="onRuleSelected()">
+                        <option SELECTED hidden>RuleName</option>
+                        {% for data1 in data1 %}
+                        <option value="{{data1}}">{{data1}}</option>"
+                        {% endfor %}
+                    </select>
+
+                    <div id=div13>
+                        <input type="text" id="parameters" placeholder="add parameters to the rule"
+                            style=" width: 180px; height: auto; margin-left: 50px;">
+                    </div>
+
+                    <div class="lookupv" id=div14 style="margin-left: auto;">
+                        <select id="ColumnName2" name="ColumnName2" method="GET" action="/" style="margin-left: 50px;">
+                            <option SELECTED hidden>ColumnName</option>
+                            {% for data in data %}
+                            <option value="{{data}}">{{data}}</option>"
+                            {% endfor %}
+                        </select>
+                        <select id="ColumnName3" name="ColumnName3" method="GET" action="/" >
+                            <option SELECTED hidden>ColumnName</option>
+                            {% for data3 in data3 %}
+                            <option value="{{data3}}">{{data3}}</option>"
+                            {% endfor %}
+                        </select>
+                        <select id="ColumnName4" name="ColumnName4" method="GET" action="/" >
+                            <option SELECTED hidden>ColumnName</option>
+                            {% for data3 in data3 %}
+                            <option value="{{data3}}">{{data3}}</option>"
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <input type="button" class="add-row" value="Add Row" style=" margin-left: 50px;
+                    margin-top: 10px;
+                    width: 130px;
+                    height: 35px;
+                    background: lightgray 0% 0% no-repeat padding-box;
+                    border-radius: 2px;
+                    opacity: 1;
+                    text-align: center;
+                    font: 1em Calibri;
+                    letter-spacing: 0px;
+                    color: #FFFFFF;
+                    opacity: 1;">
+                </div>
+                <br>
+                
                 <br>
                 <table id="table1" class="table1">
 
@@ -580,23 +641,32 @@
             window.onload = function () {
                 document.getElementById("div1").style.display = "none";
                 document.getElementById("div11").style.display = "none";
-                document.getElementById("div12").style.display = "block";
+                document.getElementById("div13").style.display = "block";
+                document.getElementById("div14").style.display = "none";
             }
 
             function onRuleSelected() {
                 var RuleName = document.getElementById("RuleName").value;
                 if (RuleName == "Lookup") {
-                    document.getElementById("div11").style.display = "block";
-                    document.getElementById("div12").style.display = "none";
+                    document.getElementById("div13").style.display = "none";
+                    document.getElementById("div14").style.display = "block";
                 } else {
-                    document.getElementById("div11").style.display = "none";
-                    document.getElementById("div12").style.display = "block";
+                    document.getElementById("div13").style.display = "block";
+                    document.getElementById("div14").style.display = "none";
                 }
 
             }
 
             function onCustomRuleSelected() {
                 var x = document.getElementById("div1");
+                if (x.style.display === "none") {
+                    x.style.display = "block";
+                } else {
+                    x.style.display = "none";
+                }
+            }
+            function onLookupSelected() {
+                var x = document.getElementById("div11");
                 if (x.style.display === "none") {
                     x.style.display = "block";
                 } else {

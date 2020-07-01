@@ -186,16 +186,15 @@
   #table4 td,
   #table4 th {
     border: 1px solid #ddd;
+    background-color: #f2f2f2;
     padding: 8px;
   }
 
-  #table4 tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-
-  #table4 tr:hover {
-    background-color: #ddd;
-  }
+  
+  
+  #table4   tbody:hover td[rowspan] {
+   background-color: #ddd; 
+}
 
   #table4 th {
     font: 1em Calibri;
@@ -277,24 +276,30 @@
             <p style="font: 1em Calibri; margin-left: 10px;" ></p>
             
           <div id="table3">
-            <table id="table4" class="table4">
-              <p id="pastruns" style="font: 1.3em Calibri;margin-left: 10px;">Past Runs</p>
+            <table id="table4" class="table4" >
+              <p id="pastruns"table bgcolor="#00ff00" style="font: 1.3em Calibri;margin-left: 10px;">Past Runs</p>
               <tr>
                 {% for col1 in column_names1 %}
                 <th>{{col1}}</th>
 
                 {% endfor %}
-
               </tr>
+
               {% for row1 in row_data1 %}
+              <tbody class = "table4">
               <tr>
                 {% for col1, row_1 in zip1(column_names1, row1) %}
-                {% if col1 == link_column %}
+                {% if col1 == "Relative File Path"%}
+                <td>{{row_1.split("|")[0]}}</td>
+                {% for i in range(1,4) %}
+                  <tr><td>{{row_1.split("|")[i]}}</td></tr>
+                {% endfor %}
                 {% else %}
-                <td>{{row_1}}</td>
+                <td rowspan="4">{{row_1}}</td>
                 {% endif %}
                 {% endfor %}
               </tr>
+            </tbody>
               {% endfor %}
 
             </table>
