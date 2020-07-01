@@ -651,6 +651,8 @@ def rules():
     #print(data1)
     out = [item for t in data1 for item in t] 
     out1 = [item for t in data3 for item in t]
+    print(out)
+    print(data1)
     # printing output 
     #print(out) 
     mydb.commit()
@@ -698,15 +700,10 @@ def rules1():
         RuleName = newform('Rule')
         Parameters = newform('Para')
         details = request.form
-        session['account_name']=details['account_name']
-        session['account_key']=details['account_key']
-        session['ContainerName']=details['ContainerName']
-        session['Blob Name']=details['Blob Name']
-        session['azure file format']=details['azure file format']
-        session['azure file delimiter']=details['azure file delimiter']
-        azureblob_parameter_dictionary={"StorageAccountAccessKey":session['account_key'],"StorageAccountName":session['account_name'],"ContainerName":session['ContainerName'],"Path":session['Blob Name'],"Format":session['azure file format'],"Delimiter":session['azure file delimiter']}
-        azureblob_parameter_dictionary_string = str(azureblob_parameter_dictionary)
-        print(azureblob_parameter_dictionary_string)
+        ColumnName2=details['ColumnName2']
+        ColumnName3=details['ColumnName3']
+        ColumnName4=details['ColumnName4']
+        lookup_column_origin_file=(ColumnName2.split("`~`",1)[0])
         df4 = pd.DataFrame(list(zip(ColumnName,RuleName,Parameters)), columns =['Column Name','RuleName','RuleParameters'])
         df4['ColumnName']=df4['Column Name'].map(lambda x: x.split("`~`",1)[0])
         df4['Description']=df4['Column Name'].map(lambda x: x.split("`~`",1)[1])
@@ -722,12 +719,14 @@ def rules1():
         data = cursor.fetchone()
         a=data[0]
         df1.loc[df1.RuleName == 'Encrypt', 'RuleParameters'] = a
-        #update_lookup_parameter=''
+        update_lookup_parameter=''
         if any(df1.RuleName == "Lookup")==True:
-            existing_string = df1[df1['RuleName'] == "Lookup"]['RuleParameters'].iloc[0]
-            update_lookup_parameter=(existing_string+','+azureblob_parameter_dictionary_string)
+            existing_string = (lookup_column_origin_file+','+ColumnName3+','+ColumnName4)
+            print(existing_string)
+            df1.loc[df1.RuleName == 'Lookup', 'RuleParameters'] = (existing_string)
+            update_lookup_parameter=(existing_string+','+session['azureblob_parameter_dictionary_string'])
             print(update_lookup_parameter)
-            #df1.loc[df1.RuleName == 'Lookup', 'RuleParameters'] = (existing_string+','+azureblob_parameter_dictionary_string)
+            # df1.loc[df1.RuleName == 'Lookup', 'RuleParameters'] = (existing_string+','+azureblob_parameter_dictionary_string)
         cols = "`,`".join([str(i) for i in df1.columns.tolist()])
         for i,row in df1.iterrows():
             sql = "INSERT INTO `business_rule_metadata` (`" +cols + "`) VALUES (" + "%s,"*(len(row)-1) + "%s)"
@@ -745,6 +744,72 @@ def rules1():
         mydb.commit()
         cursor.close()
         return render_template("metadata4.html", column_names=df8.columns.values, row_data=list(df8.values.tolist()), zip=zip,value=session['file exists'])
+
+@app.route('/rules2', methods=['GET', 'POST'])
+def rules2():
+    if request.method == "POST":
+        details = request.form
+        session['account_name']=details['account_name']
+        session['account_key']=details['account_key']
+        session['ContainerName']=details['ContainerName']
+        session['Blob Name']=details['Blob Name']
+        session['azure file format']=details['azure file format']
+        session['azure file delimiter']=details['azure file delimiter']
+        azureblob_parameter_dictionary={"StorageAccountAccessKey":session['account_key'],"StorageAccountName":session['account_name'],"ContainerName":session['ContainerName'],"Path":session['Blob Name'],"Format":session['azure file format'],"Delimiter":session['azure file delimiter']}
+        session['azureblob_parameter_dictionary_string'] = str(azureblob_parameter_dictionary)
+        print(session['azureblob_parameter_dictionary_string'])
+        account_name = session['account_name']
+        account_key = session['account_key']
+        container_name = session['ContainerName']
+        blob_name = session['Blob Name']
+        url = f"https://{account_name}.blob.core.windows.net/{container_name}/{blob_name}"
+        service = BaseBlobService(account_name=account_name, account_key=account_key)
+        token = service.generate_blob_shared_access_signature(container_name, blob_name, permission=BlobPermissions.READ, expiry=datetime.utcnow() + timedelta(hours=1),)
+        #print(url)
+        session1 = requests.Session()
+        response = session1.get(f"{url}?{token}", stream = True)
+        a = session['azure file delimiter'] #variable
+        with closing(response) as r:
+            reader = csv.reader(codecs.iterdecode(r.iter_lines(), 'latin-1'), delimiter=a , quotechar='"',quoting=csv.QUOTE_MINIMAL )
+            #print(reader)
+            lst = []
+            a=[]
+            for row in islice(reader,0,5):
+                #print(row)
+                
+                for cell in row:
+                    y=conv2(cell)
+                    a.append(y)
+                lst.append(a)
+                a=[]
+        df = pd.DataFrame(lst[1:],columns=lst[0])
+        lookup_data = list(df.columns)
+        mydb = mysql.connector.connect(host="demetadata.mysql.database.azure.com",user="DEadmin@demetadata",passwd="Tredence@123",database = "deaccelator")
+        cursor = mydb.cursor()
+        cursor.execute("SELECT concat(ColumnName,'`~`',Description) as x FROM metadata WHERE EntryID = %s ;"%(session['EntryID']))
+        data = cursor.fetchall()
+        data1= list(data)
+        cursor.execute("SELECT Name as x FROM centralrulerepo")
+        data2 = cursor.fetchall()
+        data3= list(data2)
+    
+        #   print(data1)
+        out = [item for t in data1 for item in t] 
+        out1 = [item for t in data3 for item in t]
+        # printing output 
+        #print(out) 
+        mydb.commit()
+        cursor.close()
+        value = session['file exists']
+        account = session['username']
+        if session['rule exists']=="Yes":
+            msg="Rule Name already Taken!"
+        elif session['rule exists']=="Inserted":
+            msg="New Rule "+session['RuleName']+" Added"
+        elif session['rule exists']=="No":
+            msg=""
+        
+        return render_template("metadata3.html", data3 = lookup_data,data = out,data1=out1,account = account,value=value,msg=msg)
 
 
     
