@@ -157,13 +157,17 @@
               {% for col in column_names %}
               <th>{{col}}</th>
               {% endfor %}
+              <th>Custom Rule</th>
               <!--th>Column_description</th-->
           </tr>
-          {% for row in row_data %}
+          {% for i in range(0,lengthrow) %}
           <tr>
-              {% for col, row_ in zip(column_names, row) %}
+              {% for col, row_ in zip(column_names, row_data[i]) %}
               <td>{{row_}}</td>
               {% endfor %}
+              {% if i==0 %}
+              <td rowspan="{{lengthrow}}">{{mystring}}</td>
+              {% endif%}
               </tr>
           
           {% endfor %}
