@@ -28,6 +28,7 @@ app.secret_key = 'your secret key'
 
 # Enter your database connection details below
 import mysql.connector
+from mysql.connector import Error
 
 
 
@@ -587,8 +588,11 @@ def index1():
         newform = request.form.getlist
         # EntryID = newform('EntryID')
         ColumnNumber = newform('Column Number')
-        ColumnName = newform('Column Name')	
+        ColumnName = newform('Column Name')
+        ColumnName = [x.replace(" ","") for x in ColumnName]
+        print(ColumnName)
         DataType = newform('Data Type')
+        print(DataType)
         Nullable = newform('Nullable')
         PrimaryKey = newform('PrimaryKey')
         Default = newform('Default')
@@ -599,6 +603,23 @@ def index1():
         PIIType = newform("PII Type")
         mydb = mysql.connector.connect(host="demetadata.mysql.database.azure.com",user="DEadmin@demetadata",passwd="Tredence@123",database = "deaccelator")
         cursor = mydb.cursor()
+        df_temp = pd.DataFrame(list(zip(DataType)), columns =['Data Type'])
+        df_temp_columnname = pd.DataFrame(list(zip(ColumnName)), columns =['ColumnName'])
+        df_temp_columnname['ColumnName'] = df_temp_columnname.apply(lambda x: ("`"+x['ColumnName']+"`"),axis=1)
+        df_temp_datatype =df_temp.replace(['datetime','string'],['TIMESTAMP','VARCHAR(50)'])
+        print(df_temp_datatype,df_temp_columnname)
+        df_temp_columnname.index = df_temp_datatype.index
+        df_temp_columnname['DataType']=df_temp_datatype['Data Type']
+        print(df_temp_columnname)
+        records = df_temp_columnname.to_records(index=False)
+        table_schema = list(records)
+        print(table_schema)
+        session['temp_table_name']='temp_'+str(session['EntryID'])
+        DDL = ','.join(('{name} {type}'.format(name=col_name, type=col_type) for (col_name, col_type) in table_schema))
+        print(DDL)
+        sql_create_table_statement='CREATE TABLE '+session['temp_table_name']+' ('+DDL+');'
+        print(sql_create_table_statement)
+        cursor.execute(sql_create_table_statement)
         df4 = pd.DataFrame(list(zip(ColumnNumber,ColumnName,DataType,PrimaryKey,Nullable,DQ_Check,Default,Date_Format,Column_description,PII,PIIType)), columns =['ColumnNumber','ColumnName','DataType','PrimaryKey','Nullable','DQCheck','Default','Format','Description','PII','PIIType'])
         df8 = pd.DataFrame(list(zip(ColumnNumber,ColumnName,DataType,PrimaryKey,Nullable,DQ_Check,Default,Date_Format,Column_description,PII,PIIType)), columns =['Column Number','Column Name','Data Type','Primary Key','Nullable','DQ Check','Default','Date Format','Description','PII','PII Type'])
         df1 = df4.assign(EntryID=session['EntryID'])[['EntryID'] + df4.columns.tolist()]
@@ -671,24 +692,49 @@ def rules():
 def rules01():
     if request.method == "POST":
         details = request.form
-        RuleName=details['Rule Name']
+        Rulename='custom_rule_'+details['Rule Name']
+        RuleName = Rulename.replace(" ","")
         session['RuleName']=RuleName
-        RuleDefinition=details['Rule Definition']
+        RuleDefinition='case when '+details['Rule Definition']+' then 1 else 0 end '
         RuleCreator=details['Rule Creator']
         RuleApprover=details['Rule Approver']
         mydb = mysql.connector.connect(host="demetadata.mysql.database.azure.com",user="DEadmin@demetadata",passwd="Tredence@123",database = "deaccelator")
         cursor = mydb.cursor()
         cursor.execute('SELECT * FROM CentralRuleRepo WHERE `Name` = %s And UserName=%s ',(RuleName,session['username']))
         account = cursor.fetchone()
+        mydb.commit()
+        cursor.close()
         if account:
             session['rule exists']="Yes"
             return redirect(url_for('rules'))
         else:
-            cursor.execute('INSERT INTO CentralRuleRepo (`Name`,UserName,`Definition`,Creator,Approver) VALUES(%s,%s,%s,%s,%s) ',(RuleName,session['username'],RuleDefinition,RuleCreator,RuleApprover))
-            mydb.commit()
-            cursor.close()
-            session['rule exists']="Inserted"
-            return redirect(url_for('rules'))
+            try:
+                connection = mysql.connector.connect(host="demetadata.mysql.database.azure.com",user="DEadmin@demetadata",passwd="Tredence@123",database = "deaccelator")
+                mySql_select_Query = ("select *,"+RuleDefinition+" AS "+RuleName+" from temp_"+str(session['EntryID']))
+                print(mySql_select_Query)
+                cursor = connection.cursor(buffered=True)
+                cursor.execute(mySql_select_Query)
+                record = cursor.fetchone()
+                print(record)
+                cursor.execute('INSERT INTO CentralRuleRepo (`Name`,UserName,`Definition`,Creator,Approver) VALUES(%s,%s,%s,%s,%s) ',(RuleName,session['username'],RuleDefinition,RuleCreator,RuleApprover))
+                connection.commit()
+                cursor.close()
+                session['rule exists']="Inserted"
+                return redirect(url_for('rules'))
+
+                
+
+            except mysql.connector.Error as error:
+                print("Error is", error)
+                session['rule exists']="Invalid SQL Syntax Error is: "+error
+                return redirect(url_for('rules'))
+
+
+            # cursor.execute('INSERT INTO CentralRuleRepo (`Name`,UserName,`Definition`,Creator,Approver) VALUES(%s,%s,%s,%s,%s) ',(RuleName,session['username'],RuleDefinition,RuleCreator,RuleApprover))
+            # mydb.commit()
+            # cursor.close()
+            # session['rule exists']="Inserted"
+            # return redirect(url_for('rules'))
 
 
 
@@ -709,10 +755,16 @@ def rules1():
         df4['Description']=df4['Column Name'].map(lambda x: x.split("`~`",1)[1])
         df5=df4.drop(['Column Name'], axis = 1)
         columns_order=['ColumnName','Description','RuleName','RuleParameters']
+ 
         df6 = df5.reindex(columns=columns_order)
+ 
         df1 = df6.assign(EntryID=session['EntryID'])[['EntryID'] + df6.columns.tolist()]
+        rslt_df = df1[df1['RuleName'].astype(str).str.contains('custom',case=False)]
+        df1 = df1[~df1['RuleName'].astype(str).str.contains('custom',case=False)]
+        rules = rslt_df['RuleName'].values.tolist()
+        mystring = ','.join(rules)
         df1['RuleName']=df1['RuleName'].map(lambda x: x.replace(" ",""))
-
+        
         mydb = mysql.connector.connect(host="demetadata.mysql.database.azure.com",user="DEadmin@demetadata",passwd="Tredence@123",database = "deaccelator")
         cursor = mydb.cursor()
         cursor.execute(" SELECT  `Key` FROM userdetails WHERE `UserName`=%s AND `Status`=%s ; ",(session['username'],1))
@@ -729,21 +781,24 @@ def rules1():
             # df1.loc[df1.RuleName == 'Lookup', 'RuleParameters'] = (existing_string+','+azureblob_parameter_dictionary_string)
         cols = "`,`".join([str(i) for i in df1.columns.tolist()])
         for i,row in df1.iterrows():
-            sql = "INSERT INTO `business_rule_metadata` (`" +cols + "`) VALUES (" + "%s,"*(len(row)-1) + "%s)"
+            sql = "replace INTO `business_rule_metadata` (`" +cols + "`) VALUES (" + "%s,"*(len(row)-1) + "%s)"
             cursor.execute(sql, tuple(row))
-        mydb.commit()
-        cursor.close()
+        cursor.execute('replace INTO `custom_rule_metadata` (`EntryId`,`Custom_rule`) VALUES(%s,%s) ',(session['EntryID'],mystring))
         cursor = mydb.cursor()
-        statement = 'select a.`ColumnName`,a.`DataType`,a.`PrimaryKey`,a.`Nullable`,a.`DQCheck`,a.`Default`,a.`Format`,a.`Description`,a.`PII`,a.`PIIType`,b.`Rules` from (select * from `deaccelator`.`metadata` where `EntryID` = %s) as a left join (select `ColumnName`, group_concat(`RuleName`," - " ,`RuleParameters`) as `Rules` from `deaccelator`.`business_rule_metadata` where `EntryID` =%s group by `ColumnName`) as b on a.`ColumnName` = b.`ColumnName`;'%(session['EntryID'],session['EntryID'])
+        statement = 'select a.`ColumnName`,a.`DataType`,a.`PrimaryKey`,a.`Nullable`,a.`DQCheck`,a.`Default`,a.`Format`,a.`Description`,a.`PII`,a.`PIIType`,b.`Rules` from (select * from `deaccelator`.`metadata` where `EntryID` = %s) as a left join (select `ColumnName`, group_concat(`RuleName`," - " ,`RuleParameters`) as `Rules` from `deaccelator`.`business_rule_metadata` where `EntryID` =%s group by `ColumnName`) as b on a.`ColumnName` = b.`ColumnName` union select a.`ColumnName`,a.`DataType`,a.`PrimaryKey`,a.`Nullable`,a.`DQCheck`,a.`Default`,a.`Format`,a.`Description`,a.`PII`,a.`PIIType`,b.`Rules` from (select * from `deaccelator`.`metadata` where `EntryID` = %s) as a right join (select `ColumnName`, group_concat(`RuleName`," - " ,`RuleParameters`) as `Rules` from `deaccelator`.`business_rule_metadata` where `EntryID` =%s group by `ColumnName`) as b on a.`ColumnName` = b.`ColumnName`;'%(session['EntryID'],session['EntryID'],session['EntryID'],session['EntryID'])
         cursor.execute(statement)
         data1 = cursor.fetchall()
         if any(df1.RuleName == "Lookup")==True:
             cursor.execute('update business_rule_metadata  set RuleParameters=%s where EntryID=%s and RuleName=%s;',(update_lookup_parameter,session['EntryID'],'Lookup'))
         columnlist = ['Column Name','Data Type','Primary Key','Nullable','DQ Check','Default','Format','Description','PII','PII Type','Rules']
         df8 = pd.DataFrame(data1,columns = columnlist)
+        cursor.execute('DROP TABLE IF EXISTS temp_'+str(session['EntryID'])+' ;')
         mydb.commit()
         cursor.close()
-        return render_template("metadata4.html", column_names=df8.columns.values, row_data=list(df8.values.tolist()), zip=zip,value=session['file exists'])
+        account = session['username']
+        mystring1 = mystring.replace(",","  ")
+        return render_template("metadata4.html", column_names=df8.columns.values, row_data=list(df8.values.tolist()), zip=zip,value=session['file exists'],lengthrow=len(list(df8.values.tolist())), mystring = mystring1,account = account )
+
 
 @app.route('/rules2', methods=['GET', 'POST'])
 def rules2():
