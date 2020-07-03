@@ -456,6 +456,7 @@
                 <div class="container">
                     <select id="ColumnName" id=ColumnName method="GET" action="/" style="margin-left: 50px;">
                         <option SELECTED hidden>ColumnName</option>
+                        <option value="Total File`~`applied on entire file">Total File</option>
                         {% for data in data %}
                         <option value="{{data}}">{{data}}</option>"
                         {% endfor %}
@@ -479,13 +480,13 @@
                             <option value="{{data}}">{{data}}</option>"
                             {% endfor %}
                         </select>
-                        <select id="ColumnName3" name="ColumnName3" method="GET" action="/" >
+                        <select id="ColumnName3" name="ColumnName3" method="GET" action="/" style="margin-left: 50px;">
                             <option SELECTED hidden>ColumnName</option>
                             {% for data3 in data3 %}
                             <option value="{{data3}}">{{data3}}</option>"
                             {% endfor %}
                         </select>
-                        <select id="ColumnName4" name="ColumnName4" method="GET" action="/" >
+                        <select id="ColumnName4" name="ColumnName4" method="GET" action="/" style="margin-left: 50px;">
                             <option SELECTED hidden>ColumnName</option>
                             {% for data3 in data3 %}
                             <option value="{{data3}}">{{data3}}</option>"
