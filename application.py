@@ -10,10 +10,8 @@ import csv
 import codecs
 from itertools import islice
 from dateutil.parser import parse
-import time  #depends on the mthod used for hive metadata if not useful remove it
+import time  
 from time import gmtime, strftime
-# pyodbc not required. it is similar to the before of before deployment
-# these are the new import not needed to install anything in conda base check in my env , 
 from azure.storage.blob.baseblobservice import BaseBlobService
 from azure.storage.blob import BlobPermissions
 from datetime import datetime, timedelta
@@ -26,7 +24,7 @@ app = Flask(__name__)
 # Change this to your secret key (can be anything, it's for extra protection)
 app.secret_key = 'your secret key'
 
-# Enter your database connection details below
+
 import mysql.connector
 from mysql.connector import Error
 
@@ -100,10 +98,10 @@ def home():
         #past runs
         cursor.execute(" select *  from audittable   WHERE  UserName=%s AND Status!=%s order by EntryID desc limit 5; ",(account,'Running'))
         data1 = cursor.fetchall() 
-        df2 = pd.DataFrame(data1, columns=[ 'EntryID','Job Name', 'Project Name', 'Start Time', 'End Time', 'UserName', 'Total Rows', 'Ingested Rows', 'Duplicate Records', 'DQ Check Failed','Business Rule Check Failed','Rejected Rows', 'Status', 'Relative File Path'])
+        df2 = pd.DataFrame(data1, columns=[ 'EntryID','Job Name', 'Project Name', 'Start Time', 'End Time', 'UserName', 'Total Rows', 'Ingested Rows', 'Duplicate Records', 'DQ Check Failed','Business Rule Check Failed','Custom Rule Check Failed','Rejected Rows', 'Status', 'Relative File Path'])
         #df2 = pd.DataFrame(data1, columns=['JobName','RunID' ,'StartTime' ,'EndTime','UserName' ,'TotalRows' ,'DuplicateRows','DuplicatePrimaryKey','DQCheckFailed','Status','RelativeFilePath','ProjectName'])
         df3=  df2.drop(['UserName','EntryID'], axis = 1)
-        columns_order=[ 'Project Name','Job Name', 'Start Time', 'End Time', 'Total Rows', 'Ingested Rows', 'Duplicate Records', 'DQ Check Failed','Business Rule Check Failed','Rejected Rows', 'Status', 'Relative File Path']
+        columns_order=[ 'Project Name','Job Name', 'Start Time', 'End Time', 'Total Rows', 'Ingested Rows', 'Duplicate Records', 'DQ Check Failed','Business Rule Check Failed','Custom Rule Check Failed','Rejected Rows', 'Status', 'Relative File Path']
         df4 = df3.reindex(columns=columns_order)
         # Show the profile page with account info
         return render_template('home.html',column_names=df.columns.values, row_data=list(df.values.tolist()), zip=zip,column_names1=df4.columns.values, row_data1=list(df4.values.tolist()), zip1=zip, account=account, clients = clients, Project = Project,Owner = Owner)
@@ -140,10 +138,10 @@ def homeSearch():
 
         cursor.execute(" select *  from audittable   WHERE  ProjectName LIKE %s AND UserName=%s AND Status!='Running' order by EntryID desc limit 5;",(search,account))
         data1 = cursor.fetchall() 
-        df2 = pd.DataFrame(data1, columns=[ 'EntryID','Job Name', 'Project Name', 'Start Time', 'End Time', 'UserName', 'Total Rows', 'Ingested Rows', 'Duplicate Records', 'DQ Check Failed','Business Rule Check Failed','Rejected Rows', 'Status', 'Relative File Path'])
+        df2 = pd.DataFrame(data1, columns=[ 'EntryID','Job Name', 'Project Name', 'Start Time', 'End Time', 'UserName', 'Total Rows', 'Ingested Rows', 'Duplicate Records', 'DQ Check Failed','Business Rule Check Failed','Custom Rule Check Failed','Rejected Rows', 'Status', 'Relative File Path'])
         #df2 = pd.DataFrame(data1, columns=['JobName','RunID' ,'StartTime' ,'EndTime','UserName' ,'TotalRows' ,'DuplicateRows','DuplicatePrimaryKey','DQCheckFailed','Status','RelativeFilePath','ProjectName'])
         df3=  df2.drop(['UserName','EntryID'], axis = 1)
-        columns_order=[ 'Project Name','Job Name', 'Start Time', 'End Time', 'Total Rows', 'Ingested Rows', 'Duplicate Records', 'DQ Check Failed','Business Rule Check Failed','Rejected Rows', 'Status', 'Relative File Path']
+        columns_order=[ 'Project Name','Job Name', 'Start Time', 'End Time', 'Total Rows', 'Ingested Rows', 'Duplicate Records', 'DQ Check Failed','Business Rule Check Failed','Custom Rule Check Failed','Rejected Rows', 'Status', 'Relative File Path']
         df4 = df3.reindex(columns=columns_order)
        
         mydb.commit()
@@ -163,8 +161,8 @@ def overview():
     return redirect(url_for('login'))
 
 @app.route('/pythonlogin/overview', methods=['GET', 'POST'])
-def overviewform():
-    if request.method == "POST":
+def overviewform():                    # setup page user input will be recorder here and 
+    if request.method == "POST":       # inserted into database tables and some sesion variables used across other functions
         details = request.form
         session['hostname']=details['hostname']
         session['user']=details['User']
@@ -252,8 +250,11 @@ def overviewform():
             return redirect(url_for('index'))
     return render_template('setup.html')
 
-@app.route("/hive_metadata_1", methods=['GET', 'POST'])    #series for hive metadata capture
-def hive_metadata_1():
+
+@app.route("/hive_metadata_1", methods=['GET', 'POST'])    #series for hive metadata capture  
+def hive_metadata_1():     # for azure hd insight clusterhive metadata 
+                           # there is small notebook which would extract metadata and send back to flask api
+                           # this is due to unable to install pyodbc driver inside azure app service                           
     headers = {'Authorization': 'Bearer dapi042eca35a8dd2f707b2562849e33f013'}
     data = '{ "job_id" : 12, "notebook_params": { "entryid":  ' +str(session['EntryID'])+ ' } }'
     response = requests.post('https://adb-6971132450799346.6.azuredatabricks.net/api/2.0/jobs/run-now', headers=headers, data=data)
@@ -266,7 +267,7 @@ def hive_metadata_1():
 
 
 
-@app.route("/hive_metadata_2", methods=['GET', 'POST'])  # not useful when time related method selected
+@app.route("/hive_metadata_2", methods=['GET', 'POST']) 
 def hive_metadata_2():
     b = session['b']
     headers = {'Authorization': 'Bearer dapi042eca35a8dd2f707b2562849e33f013'}
@@ -274,41 +275,6 @@ def hive_metadata_2():
     c = response1.text
     session['c']=c
     return redirect(url_for('hive_metadata_3'))
-
-
-                                                        # time related method
-# @app.route("/hive_metadata_3", methods=['GET', 'POST'])
-# def hive_metadata_3():
-#     now = time.time()
-#     future = now + 30
-#     while time.time() < future:
-#         mydb = mysql.connector.connect(host="demetadata.mysql.database.azure.com",user="DEadmin@demetadata",passwd="Tredence@123",database = "deaccelator")
-#         cursor = mydb.cursor()
-#         cursor.execute('SELECT * FROM metadata_temp WHERE EntryID = %s ;'%(session['EntryID']))
-#         # Fetch one record and return result
-#         account = cursor.fetchall()
-#         # If account exists in accounts table in out database
-#         if account:
-#             df = pd.DataFrame(account,columns='ColumnName DataType Nullable Default'.split())
-#             break
-#         else:
-#                 #time.sleep(0.1 - ((time.time() - now) % 0.1))
-#             pass
-#     if account:
-#         df = df.assign(ColumnNumber=[i+1 for i in range(len(df))])[['ColumnNumber'] + df.columns.tolist()]
-#         #df1=  df.drop(['EntryID'], axis = 1)
-#         #df1['Default']=''
-#         df['Description']=''
-#         value = session['file exists']
-#         return render_template("metadataV3.html", column_names=df.columns.values, row_data=list(df.values.tolist()), zip=zip, value=value)
-#     else:
-#         print("Job Failed")
-        
-
-
-
-
-
 
 
 @app.route("/hive_metadata_3", methods=['GET', 'POST'])  # metadata retrieval directly from databricks notebook
@@ -336,62 +302,7 @@ def hive_metadata_3():
         return redirect(url_for('hive_metadata_2'))
         
 
-
-def conv2(s):      # used for determing datatypes of flat file
-    try:
-        val = int(s)
-        return val
-    except ValueError:
-        try:
-            val = float(s)
-            return val
-        except ValueError:
-            try:
-                s=parse(s)
-            except ValueError:
-                pass    
-    return s
-
-def get_confirm_token(response):
-            for key, value in response.cookies.items():
-                if key.startswith('download_warning'):
-                    return value
-            return None
-
-
-def Business_Description(instr):
-    shdict = {'%': 'Percentage','rev':'Revenue','cat':'Category','num': 'Number','#': 'Number','no': 'Number','Sl': 'Serial','ph': 'Phone', 'idx': 'Index','dob': 'Date of Birth','perc':'Percentage','cust':'Customer'}
-    instr = str(instr)
-    import re
-    tempstr = instr.replace("_"," ")
-    tempstr = tempstr.replace("."," ")
-    tempstr = re.sub(r'([a-z](?=[A-Z])|[A-Z](?=[A-Z][a-z]))', r'\1 ',tempstr)
-    tempstr = tempstr.lower()
-    for word in tempstr.split():
-        try:
-            tempstr = tempstr.replace(word,shdict[word])
-        except:
-            tempstr
-    if(instr.isupper()):
-        tempstr = tempstr.upper() 
-    else:
-        tempstr = tempstr.title()
-    return tempstr
-
-def pii(instr):
-    import re
-    if (bool(re.match(r'^(?!000|.+0{4})(?:\d{9}|\d{3}-\d{2}-\d{4})$',str(instr)))):
-        return "Social Security Number"
-    elif(bool(re.match(r'^(?:\d{10}|\d{3}-\d{3}-\d{4})$',str(instr)))):
-        return "Phone Number"
-    elif(bool(re.match(r'\b[A-Z0-9.@_%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b',str(instr),re.I))):
-        return "Email ID"
-    elif(bool(re.match(r'^([456][0-9]{3})-?([0-9]{4})-?([0-9]{4})-?([0-9]{4})$',str(instr)))):
-        return "Credit Card Number"
-    else:
-        return "None"
-
-@app.route('/metadata', methods=['GET', 'POST'])
+@app.route('/ingest', methods=['GET', 'POST'])
 def index():                                     # for flat file and mysql metadata
     SourceType = session['source location type']
     if SourceType == 'MySql':
@@ -556,12 +467,69 @@ def index():                                     # for flat file and mysql metad
         account = session['username']
         return render_template("metadata.html", column_names=df5.columns.values, row_data=list(df5.values.tolist()), zip=zip, value=value,account = account)
 
-# need to be enabled for now not in function
+
+def conv2(s):      # used for determing datatypes of flat file
+    try:
+        val = int(s)
+        return val
+    except ValueError:
+        try:
+            val = float(s)
+            return val
+        except ValueError:
+            try:
+                s=parse(s)
+            except ValueError:
+                pass    
+    return s
+
+def get_confirm_token(response):
+            for key, value in response.cookies.items():
+                if key.startswith('download_warning'):
+                    return value
+            return None
+
+
+def Business_Description(instr):
+    shdict = {'%': 'Percentage','rev':'Revenue','cat':'Category','num': 'Number','#': 'Number','no': 'Number','Sl': 'Serial','ph': 'Phone', 'idx': 'Index','dob': 'Date of Birth','perc':'Percentage','cust':'Customer'}
+    instr = str(instr)
+    import re
+    tempstr = instr.replace("_"," ")
+    tempstr = tempstr.replace("."," ")
+    tempstr = re.sub(r'([a-z](?=[A-Z])|[A-Z](?=[A-Z][a-z]))', r'\1 ',tempstr)
+    tempstr = tempstr.lower()
+    for word in tempstr.split():
+        try:
+            tempstr = tempstr.replace(word,shdict[word])
+        except:
+            tempstr
+    if(instr.isupper()):
+        tempstr = tempstr.upper() 
+    else:
+        tempstr = tempstr.title()
+    return tempstr
+
+def pii(instr):
+    import re
+    if (bool(re.match(r'^(?!000|.+0{4})(?:\d{9}|\d{3}-\d{2}-\d{4})$',str(instr)))):
+        return "Social Security Number"
+    elif(bool(re.match(r'^(?:\d{10}|\d{3}-\d{3}-\d{4})$',str(instr)))):
+        return "Phone Number"
+    elif(bool(re.match(r'\b[A-Z0-9.@_%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b',str(instr),re.I))):
+        return "Email ID"
+    elif(bool(re.match(r'^([456][0-9]{3})-?([0-9]{4})-?([0-9]{4})-?([0-9]{4})$',str(instr)))):
+        return "Credit Card Number"
+    else:
+        return "None"
+
+
+
 @app.route('/Rollbackmetadata', methods=['GET', 'POST'])
 def Rollbackmetadata():
     mydb = mysql.connector.connect(host="demetadata.mysql.database.azure.com",user="DEadmin@demetadata",passwd="Tredence@123",database = "deaccelator")
     cursor = mydb.cursor()
     cursor.execute("DELETE FROM metadata WHERE EntryID = %s ;"%(session['EntryID']))
+    cursor.execute(" DROP TABLE "+session['temp_table_name']+"  ;")
     mydb.commit()
     cursor.close()
     if session['source location type'] == 'Hive':
@@ -569,20 +537,10 @@ def Rollbackmetadata():
     else:
         return redirect(url_for('index'))    
 
-@app.route('/Rollbackbusinessmetadata', methods=['GET', 'POST'])
-def Rollbackbusinessmetadata():
-    mydb = mysql.connector.connect(host="demetadata.mysql.database.azure.com",user="DEadmin@demetadata",passwd="Tredence@123",database = "deaccelator")
-    cursor = mydb.cursor()
-    cursor.execute("DELETE FROM business_rule_metadata WHERE EntryID = %s ;"%(session['EntryID']))
-    mydb.commit()
-    cursor.close()
-    return redirect(url_for('rules'))
 
 
-
-
-@app.route('/ingest', methods=['GET', 'POST'])
-def index1():
+@app.route('/metadata', methods=['GET', 'POST'])   # after validate metadata to insert into database and 
+def index1():                                 # to show back in html page 
     if request.method == "POST":
         session['rule exists']="No"
         newform = request.form.getlist
@@ -623,9 +581,6 @@ def index1():
         df4 = pd.DataFrame(list(zip(ColumnNumber,ColumnName,DataType,PrimaryKey,Nullable,DQ_Check,Default,Date_Format,Column_description,PII,PIIType)), columns =['ColumnNumber','ColumnName','DataType','PrimaryKey','Nullable','DQCheck','Default','Format','Description','PII','PIIType'])
         df8 = pd.DataFrame(list(zip(ColumnNumber,ColumnName,DataType,PrimaryKey,Nullable,DQ_Check,Default,Date_Format,Column_description,PII,PIIType)), columns =['Column Number','Column Name','Data Type','Primary Key','Nullable','DQ Check','Default','Date Format','Description','PII','PII Type'])
         df1 = df4.assign(EntryID=session['EntryID'])[['EntryID'] + df4.columns.tolist()]
-        # session['json_metadata']=str(df1.to_json)
-        # print(session['json_metadata'])
-        # not requied above two lines for now
         cols = "`,`".join([str(i) for i in df1.columns.tolist()])
         for i,row in df1.iterrows():
             sql = "INSERT INTO `metadata` (`" +cols + "`) VALUES (" + "%s,"*(len(row)-1) + "%s)"
@@ -658,7 +613,7 @@ def index1():
             return render_template("metadata2.html", column_names=df8.columns.values, row_data=list(df8.values.tolist()), zip=zip, value=value,account = account)
     return render_template("metadata.html",account = account)
 
-@app.route('/rules', methods=['GET', 'POST'])
+@app.route('/rules', methods=['GET', 'POST'])  # for rules html page (metadata3.html)
 def rules():
     mydb = mysql.connector.connect(host="demetadata.mysql.database.azure.com",user="DEadmin@demetadata",passwd="Tredence@123",database = "deaccelator")
     cursor = mydb.cursor()
@@ -688,7 +643,7 @@ def rules():
         msg=""
     return render_template("metadata3.html", data = out,data1=out1,account = account,value=value,msg=msg)
 
-@app.route('/rules01', methods=['GET', 'POST'])
+@app.route('/rules01', methods=['GET', 'POST'])  # for custom rule input form in (rules page metadata3.html)
 def rules01():
     if request.method == "POST":
         details = request.form
@@ -738,13 +693,13 @@ def rules01():
 
 
 
-@app.route('/rules1', methods=['GET', 'POST'])
+@app.route('/rules1', methods=['GET', 'POST']) # after submit of rules page ( metadata3.html)
 def rules1():
     if request.method == "POST":
         newform = request.form.getlist
-        ColumnName = newform('Cname')
-        RuleName = newform('Rule')
-        Parameters = newform('Para')
+        ColumnName = newform('ColumnName_1')
+        RuleName = newform('RuleName_1')
+        Parameters = newform('Parameters_1')
         details = request.form
         ColumnName2=details['ColumnName2']
         ColumnName3=details['ColumnName3']
@@ -800,8 +755,8 @@ def rules1():
         return render_template("metadata4.html", column_names=df8.columns.values, row_data=list(df8.values.tolist()), zip=zip,value=session['file exists'],lengthrow=len(list(df8.values.tolist())), mystring = mystring1,account = account )
 
 
-@app.route('/rules2', methods=['GET', 'POST'])
-def rules2():
+@app.route('/rules2', methods=['GET', 'POST'])  # for lookup file column names and connection string capture
+def rules2():                                   # in rules page (metadata3.html)
     if request.method == "POST":
         details = request.form
         session['account_name']=details['account_name']
@@ -866,11 +821,18 @@ def rules2():
         
         return render_template("metadata3.html", data3 = lookup_data,data = out,data1=out1,account = account,value=value,msg=msg)
 
-
+@app.route('/Rollbackbusinessmetadata', methods=['GET', 'POST'])
+def Rollbackbusinessmetadata():
+    mydb = mysql.connector.connect(host="demetadata.mysql.database.azure.com",user="DEadmin@demetadata",passwd="Tredence@123",database = "deaccelator")
+    cursor = mydb.cursor()
+    cursor.execute("DELETE FROM business_rule_metadata WHERE EntryID = %s ;"%(session['EntryID']))
+    mydb.commit()
+    cursor.close()
+    return redirect(url_for('rules'))
     
 import requests,json
 
-@app.route('/pythonlogin/metadata4', methods=['GET', 'POST'])
+@app.route('/pythonlogin/metadata4', methods=['GET', 'POST'])  # direct ingest button when file already exists is no
 def index2():
     headers = {'Authorization': 'Bearer dapi042eca35a8dd2f707b2562849e33f013'}
     data = '{ "job_id" : 17 , "notebook_params": { "EntryId": ' +str(session['EntryID'])+ ' } }'
@@ -879,7 +841,7 @@ def index2():
     return redirect(url_for('home')) 
 
 
-@app.route('/pythonlogin/metadata5', methods=['GET', 'POST'])
+@app.route('/pythonlogin/metadata5', methods=['GET', 'POST']) # Append ingest button when file already exists is YES and metadata is matching
 def append():
     mydb = mysql.connector.connect(host="demetadata.mysql.database.azure.com",user="DEadmin@demetadata",passwd="Tredence@123",database = "deaccelator")
     cursor = mydb.cursor()
@@ -893,7 +855,7 @@ def append():
     return redirect(url_for('home')) 
 
 @app.route('/pythonlogin/metadata6', methods=['GET', 'POST'])
-def replace():
+def replace():    # Replace ingest button when file already exists is YES and metadata is not matching
     mydb = mysql.connector.connect(host="demetadata.mysql.database.azure.com",user="DEadmin@demetadata",passwd="Tredence@123",database = "deaccelator")
     cursor = mydb.cursor()
     cursor.execute(' UPDATE datacatlogentry Set Operation = %s Where EntryID = %s ; ',('Overwrite',int(session['EntryID'])))

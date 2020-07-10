@@ -9,7 +9,7 @@
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 </head>
 <style>
-  .img1{
+  .TredenceLogo{
     position: absolute;
     top: 10px;
     left: 80px;
@@ -19,7 +19,7 @@
     border: 0;
 
 }
-.button1
+.LogoutLogo
 {   
     position: absolute;
     top: 10px;
@@ -31,7 +31,7 @@
     border:none;
     outline: none;
 }
-.user1{
+.ClientLogo{
     position: absolute;
     top: 10px;
     left: 988px;
@@ -41,7 +41,7 @@
     opacity: 1;
     border:0px ;
 }
-.sidenav {
+.NavigationBar {
   height: 100%;
   width: 0;
   position: fixed;
@@ -55,7 +55,7 @@
   background: #FFFFFF 0% 0% no-repeat padding-box;
 }
 
-.sidenav a {
+.NavigationBar a {
   padding: 7px 8px 8px 25px;
   font-size: 25px;
   display: block;
@@ -63,7 +63,7 @@
 }
 
 
-.sidenav .closebtn {
+.NavigationBar .closebtn {
   position: absolute;
   top: 0;
   right: 15px;
@@ -79,10 +79,10 @@
 }
 
 @media screen and (max-height: 450px) {
-  .sidenav {padding-top: 15px;}
-  .sidenav a {font-size: 18px;}
+  .NavigationBar {padding-top: 15px;}
+  .NavigationBar a {font-size: 18px;}
 }
-#table1
+#MetadataDiscovery
 {
   font: 1em Calibri;
   border-collapse: collapse;
@@ -93,16 +93,16 @@
   width: 98%;
 }
 
-#table1 td, #table1 th {
+#MetadataDiscovery td, #MetadataDiscovery th {
   border: 1px solid #ddd;
   padding: 8px;
 }
 
-#table1 tr:nth-child(even){background-color: #f2f2f2;}
+#MetadataDiscovery tr:nth-child(even){background-color: #f2f2f2;}
 
-#table1 tr:hover {background-color: #ddd;}
+#MetadataDiscovery tr:hover {background-color: #ddd;}
 
-#table1 th {
+#MetadataDiscovery th {
   padding-top: 12px;
   padding-bottom: 12px;
   text-align: center;
@@ -124,15 +124,15 @@
 <body>
     
     <header>
-    <i class = img1></i>
-    <a href="{{ url_for('logout') }}" type="logout" value="logout"><i class = button1></i></a>
-    <i class = user1></i>
+    <i class = TredenceLogo></i>
+    <a href="{{ url_for('logout') }}" type="logout" value="logout"><i class = LogoutLogo></i></a>
+    <i class = ClientLogo></i>
     <h1 style="font: 1.2em Calibri;" id = 'user'>{{account}}</h1>
     <div id="nav-placeholder">
       <div id="main">
         <a class="openbtn" onclick="openNav()"> <img src="static/Shape 1.svg" ></a>    
     </div>
-    <div id="mySidenav" class="sidenav">
+    <div id="myNavigationBar" class="NavigationBar">
       <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"><img src="static/Shape 1.svg"></a>
       <a href="{{ url_for('overview') }}"><i class="fas fa-home"></i><img src="static/dashboard-active.svg"></a>
       <a href="#"><i class="fas fa-home"></i><img src ="static/cog.svg" ></a>
@@ -152,7 +152,7 @@
       <div class="metadatapage">
       <div class="setuppage">
       <form action="#" method="post" >      
-        <table name = "table1" id = "table1">
+        <table name = "MetadataDiscovery" id = "MetadataDiscovery">
           <tr>
               {% for col in column_names %}
               <th>{{col}}</th>
@@ -213,11 +213,11 @@
     </script>
            <script>
             function openNav() {
-              document.getElementById("mySidenav").style.width = "70px";
+              document.getElementById("myNavigationBar").style.width = "70px";
             }
             
             function closeNav() {
-              document.getElementById("mySidenav").style.width = "0";
+              document.getElementById("myNavigationBar").style.width = "0";
             
             }
             </script>

@@ -9,7 +9,7 @@
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 </head>
 <style>
-  .img1{
+  .TredenceLogo{
     position: absolute;
     top: 10px;
     left: 80px;
@@ -19,7 +19,7 @@
     border: 0;
 
 }
-.button1
+.LogoutLogo
 {   
     position: absolute;
     top: 10px;
@@ -31,7 +31,7 @@
     border:none;
     outline: none;
 }
-.user1{
+.ClientLogo{
     position: absolute;
     top: 10px;
     left: 988px;
@@ -82,7 +82,7 @@
   .sidenav {padding-top: 15px;}
   .sidenav a {font-size: 18px;}
 }
-#table1
+#FinalMetadata
 {
   font: 1em Calibri;
   border-collapse: collapse;
@@ -93,16 +93,16 @@
   width: 98%;
 }
 
-#table1 td, #table1 th {
+#FinalMetadata td, #FinalMetadata th {
   border: 1px solid #ddd;
   padding: 8px;
 }
 
-#table1 tr:nth-child(even){background-color: #f2f2f2;}
+#FinalMetadata tr:nth-child(even){background-color: #f2f2f2;}
 
-#table1 tr:hover {background-color: #ddd;}
+#FinalMetadata tr:hover {background-color: #ddd;}
 
-#table1 th {
+#FinalMetadata th {
   padding-top: 12px;
   padding-bottom: 12px;
   text-align: center;
@@ -124,9 +124,9 @@
 <body>
     
     <header>
-    <i class = img1></i>
-    <a href="{{ url_for('logout') }}" type="logout" value="logout"><i class = button1></i></a>
-    <i class = user1></i>
+    <i class = TredenceLogo></i>
+    <a href="{{ url_for('logout') }}" type="logout" value="logout"><i class = LogoutLogo></i></a>
+    <i class = ClientLogo></i>
     <h1 style="font: 1.2em Calibri;" id = 'user'>{{account}}</h1>
     <div id="nav-placeholder">
       <div id="main">
@@ -152,7 +152,7 @@
       <div class="metadatapage">
       <div class="setuppage">
       <form action="#" method="post" >      
-        <table name = "table1" id = "table1">
+        <table name = "FinalMetadata" id = "FinalMetadata">
           <tr>
               {% for col in column_names %}
               <th>{{col}}</th>

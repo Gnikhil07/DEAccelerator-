@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Metadata</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='metadata.css') }}"> 
-    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Metadata</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='metadata.css') }}">
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 </head>
 <style>
-  .img1{
+  .TredenceLogo {
     position: absolute;
     top: 10px;
     left: 80px;
@@ -18,9 +19,9 @@
     background: transparent url('static/Group 298.svg');
     border: 0;
 
-}
-.button1
-{   
+  }
+
+  .LogoutLogo {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -28,10 +29,11 @@
     height: 25px;
     background: transparent url('static/Shape.png') 0% 0% no-repeat padding-box;
     opacity: 1;
-    border:none;
+    border: none;
     outline: none;
-}
-.user1{
+  }
+
+  .ClientLogo {
     position: absolute;
     top: 10px;
     left: 988px;
@@ -39,138 +41,154 @@
     height: 27px;
     background: transparent url('static/user.svg') 0% 0% no-repeat padding-box;
     opacity: 1;
-    border:0px ;
-}
-.sidenav {
-  height: 100%;
-  width: 0;
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  overflow-x: hidden;
-  transition: 0.2s;
-  padding-top: 60px;
-  box-shadow: 0px 8px 24px #00000029;
-  background: #FFFFFF 0% 0% no-repeat padding-box;
-}
+    border: 0px;
+  }
 
-.sidenav a {
-  padding: 7px 8px 8px 25px;
-  font-size: 25px;
-  display: block;
-  transition: 0.3s;
-}
+  .NavigationBar {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    overflow-x: hidden;
+    transition: 0.2s;
+    padding-top: 60px;
+    box-shadow: 0px 8px 24px #00000029;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+  }
+
+  .NavigationBar a {
+    padding: 7px 8px 8px 25px;
+    font-size: 25px;
+    display: block;
+    transition: 0.3s;
+  }
 
 
-.sidenav .closebtn {
-  position: absolute;
-  top: 0;
-  right: 15px;
-  font-size: 36px;
-  margin-left: 10px;
-}
-#main {
-  position: absolute;
-  top: 0;
-  left: 12px;
-  font-size: 36px;
-  margin-left: 10px;
-}
+  .NavigationBar .closebtn {
+    position: absolute;
+    top: 0;
+    right: 15px;
+    font-size: 36px;
+    margin-left: 10px;
+  }
 
-@media screen and (max-height: 450px) {
-  .sidenav {padding-top: 15px;}
-  .sidenav a {font-size: 18px;}
-}
-input, 
-textarea {
- /* To make sure that all text fields have the same font settings
+  #main {
+    position: absolute;
+    top: 0;
+    left: 12px;
+    font-size: 36px;
+    margin-left: 10px;
+  }
+
+  @media screen and (max-height: 450px) {
+    .NavigationBar {
+      padding-top: 15px;
+    }
+
+    .NavigationBar a {
+      font-size: 18px;
+    }
+  }
+
+  input,
+  textarea {
+    /* To make sure that all text fields have the same font settings
  By default, textareas have a monospace font */
- font: 1em Calibri;
- 
- /* Uniform text field size */
- width: 100px;
- 
- /* Match form field borders */
- border: 1px solid #999;
-}
- 
-input:focus, 
-textarea:focus {
- /* Additional highlight for focused elements */
- border-color: #000;
- font: 1em Calibri;
-}
- 
-textarea {
- /* Align multiline text fields with their labels */
- vertical-align: top;
- 
- /* Provide space to type some text */
- height: 5em;
-}
- 
-button {
- /* Align buttons with the text fields */
- padding-left: 10px; /* same size as the label elements */
- font: 1em Calibri;
-}
- 
-button {
- /* This extra margin represent roughly the same space as the space
+    font: 1em Calibri;
+
+    /* Uniform text field size */
+    width: 100px;
+
+    /* Match form field borders */
+    border: 1px solid #999;
+  }
+
+  input:focus,
+  textarea:focus {
+    /* Additional highlight for focused elements */
+    border-color: #000;
+    font: 1em Calibri;
+  }
+
+  textarea {
+    /* Align multiline text fields with their labels */
+    vertical-align: top;
+
+    /* Provide space to type some text */
+    height: 5em;
+  }
+
+  button {
+    /* Align buttons with the text fields */
+    padding-left: 10px;
+    /* same size as the label elements */
+    font: 1em Calibri;
+  }
+
+  button {
+    /* This extra margin represent roughly the same space as the space
  between the labels and their text fields */
- margin-left: 100em;
- font: 1em Calibri;
-}
+    margin-left: 100em;
+    font: 1em Calibri;
+  }
 
 
 
-#table1
-{
-  font: 1em Calibri;
-  border-collapse: collapse;
-  position: relative;
-  top: 10px;
-  left: 12px;
-  right: 5px;
-  width: 97%;
-  zoom : 87%
-}
+  #MetadataDiscovery {
+    font: 1em Calibri;
+    border-collapse: collapse;
+    position: relative;
+    top: 10px;
+    left: 12px;
+    right: 5px;
+    width: 97%;
+    zoom: 87%
+  }
 
-#table1 td, #table1 th {
-  border: 1px solid #ddd;
-  padding: 8px;
-}
+  #MetadataDiscovery td,
+  #MetadataDiscovery th {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
 
-#table1 tr:nth-child(even){background-color: #f2f2f2;}
+  #MetadataDiscovery tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
 
-#table1 tr:hover {background-color: #ddd;}
+  #MetadataDiscovery tr:hover {
+    background-color: #ddd;
+  }
 
-#table1 th {
-  padding-top: 12px;
-  padding-bottom: 12px;
-  text-align: center;
-  background-color:cornflowerblue;
-  color: white;
-}
+  #MetadataDiscovery th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: center;
+    background-color: cornflowerblue;
+    color: white;
+  }
 
-#PrimaryKey, #DQCheck, #Nullable, #Default {
-  font: 1em Calibri;
-         
-         /* Uniform text field size */
-         width: 100px;
-         
-         /* Match form field borders */
-         border: 1px solid #999;
+  #PrimaryKey,
+  #DQCheck,
+  #Nullable,
+  #Default {
+    font: 1em Calibri;
 
-}
+    /* Uniform text field size */
+    width: 100px;
 
-/* tr:nth-child(even) {
+    /* Match form field borders */
+    border: 1px solid #999;
+
+  }
+
+  /* tr:nth-child(even) {
   background-color: #dddddd;
 
 } */
 
-.setuppage{
+  .setuppage {
     position: absolute;
     top: 120px;
     left: 70px;
@@ -180,92 +198,93 @@ button {
     box-shadow: 0px 3px 6px #00000029;
     border: 1px solid #E6EAEE;
     opacity: 1;
-}
+  }
 </style>
+
 <body>
-    
-    <header>
-    <i class = img1></i>
-    <a href="{{ url_for('logout') }}" type="logout" value="logout"><i class = button1></i></a>
-    <i class = user1></i>
-    <h1 style="font: 1.2em Calibri;" id = 'user'>{{account}}</h1>
+
+  <header>
+    <i class=TredenceLogo></i>
+    <a href="{{ url_for('logout') }}" type="logout" value="logout"><i class=LogoutLogo></i></a>
+    <i class=ClientLogo></i>
+    <h1 style="font: 1.2em Calibri;" id='user'>{{account}}</h1>
     <div id="nav-placeholder">
       <div id="main">
-        <a class="openbtn" onclick="openNav()"> <img src="static/Shape 1.svg" ></a>    
-    </div>
-    <div id="mySidenav" class="sidenav">
-      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"><img src="static/Shape 1.svg"></a>
-      <a href="{{ url_for('overview') }}"><i class="fas fa-home"></i><img src="static/dashboard-active.svg"></a>
-      <a href="#"><i class="fas fa-home"></i><img src ="static/cog.svg" ></a>
-    
-    </div>
-   
+        <a class="openbtn" onclick="openNav()"> <img src="static/Shape 1.svg"></a>
+      </div>
+      <div id="myNavigationBar" class="NavigationBar">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"><img src="static/Shape 1.svg"></a>
+        <a href="{{ url_for('overview') }}"><i class="fas fa-home"></i><img src="static/dashboard-active.svg"></a>
+        <a href="#"><i class="fas fa-home"></i><img src="static/cog.svg"></a>
+
+      </div>
+
     </div>
     <div class="back1"></div>
     <div class="topnav" id="myTopnav">
-        <a style="font: 1em Calibri;" href="#" >Setup</a>    
-        <!-- roll back function need to be enabled here for setup button -->
-        <a style="font: 1em Calibri;" href="#" class="active">Metadata</a>
-        <a href="javascript:void(0);" class="icon" onclick="myFunction()">
-          <i class="fa fa-bars"></i>
-        </a>
-      </div>
-      <div class="metadatapage">
-      <form action="{{ url_for('index1') }}" method="post" id = "form1">      
-  <div class="setuppage">
-    <div id="table2">
-      <datalist id="mylist">
-        <option value="%d-%m-%Y">
-        <option value="%d-%b-%Y">
-        <option value="%Y-%b-%d">
-          <option value="%Y-%m-%d">
-            <option value="%d-%m-%y %H:%M:%S">
-     </datalist>
-        <table id="table1" class="table1" >
-          <tr>
-              {% for col in (0,1,2) %}
-              <th>{{column_names[col]}}</th>
-              {% endfor %}
-              <th>Primary Key</th>
-              <th>Nullable</th>
-              <th>DQ Check</th>
-              <th>Default</th>
-              <th>Date Format</th>
-              {% for col in (3,4,5) %}
-              <th>{{column_names[col]}}</th>
-              {% endfor %}
-          </tr>
-          {% for row in row_data %}
-          <tr>
-              {% for col, row_ in zip(column_names[:3], row[:3]) %}
-              <td><input type="text" id="{{col}}" name="{{col}}" value="{{row_}}"></td>
-              {% endfor %}
-              <td><select class="form-control" name = "PrimaryKey" id = "PrimaryKey">
-                <option>Yes</option>
-                <option selected>No</option>
-              </select></td>
-              <td><select class="form-control" name = "Nullable" id = "Nullable">
-                <option selected>Yes</option>
-                <option >No</option>
-              </select></td>
-              <td><select class="form-control" name = "DQ Check" id = "DQCheck">
-                <option selected>No</option>
-                <option >Tier 1</option>
-                <option >Tier 2</option>
-                <option >Tier 3</option>
-              </select></td>
-              <td><input type="text" id="Default" name="Default" ></td>
-              <td><input type="search" list="mylist" name = "Date Format" id = "DateFormat"></td>
-              {% for col, row_ in zip(column_names[3:], row[3:]) %}
-              <td><input type="text" id="{{col}}" name="{{col}}" value="{{row_}}"></td>
-              {% endfor %}
-          </tr>
-          {% endfor %}
-      
-      </table>
+      <a style="font: 1em Calibri;" href="#">Setup</a>
+      <!-- roll back function need to be enabled here for setup button -->
+      <a style="font: 1em Calibri;" href="#" class="active">Metadata</a>
+      <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+        <i class="fa fa-bars"></i>
+      </a>
     </div>
-      <p style="font: 1em Calibri;" >File Already Exists : {{value}}  </p>
-      <input type="submit" class="button" value="Validate the Metadata" id="btnSubmit" style="margin-top: 10px ; margin-left: 500px;
+    <div class="metadatapage">
+      <form action="{{ url_for('index1') }}" method="post" id="form1">
+        <div class="setuppage">
+          <div id="table2">
+            <datalist id="mylist">
+              <option value="%d-%m-%Y">
+              <option value="%d-%b-%Y">
+              <option value="%Y-%b-%d">
+              <option value="%Y-%m-%d">
+              <option value="%d-%m-%y %H:%M:%S">
+            </datalist>
+            <table id="MetadataDiscovery" class="MetadataDiscovery">
+              <tr>
+                {% for col in (0,1,2) %}
+                <th>{{column_names[col]}}</th>
+                {% endfor %}
+                <th>Primary Key</th>
+                <th>Nullable</th>
+                <th>DQ Check</th>
+                <th>Default</th>
+                <th>Date Format</th>
+                {% for col in (3,4,5) %}
+                <th>{{column_names[col]}}</th>
+                {% endfor %}
+              </tr>
+              {% for row in row_data %}
+              <tr>
+                {% for col, row_ in zip(column_names[:3], row[:3]) %}
+                <td><input type="text" id="{{col}}" name="{{col}}" value="{{row_}}"></td>
+                {% endfor %}
+                <td><select class="form-control" name="PrimaryKey" id="PrimaryKey">
+                    <option>Yes</option>
+                    <option selected>No</option>
+                  </select></td>
+                <td><select class="form-control" name="Nullable" id="Nullable">
+                    <option selected>Yes</option>
+                    <option>No</option>
+                  </select></td>
+                <td><select class="form-control" name="DQ Check" id="DQCheck">
+                    <option selected>No</option>
+                    <option>Tier 1</option>
+                    <option>Tier 2</option>
+                    <option>Tier 3</option>
+                  </select></td>
+                <td><input type="text" id="Default" name="Default"></td>
+                <td><input type="search" list="mylist" name="Date Format" id="DateFormat"></td>
+                {% for col, row_ in zip(column_names[3:], row[3:]) %}
+                <td><input type="text" id="{{col}}" name="{{col}}" value="{{row_}}"></td>
+                {% endfor %}
+              </tr>
+              {% endfor %}
+
+            </table>
+          </div>
+          <p style="font: 1em Calibri;">File Already Exists : {{value}} </p>
+          <input type="submit" class="button" value="Validate the Metadata" id="btnSubmit" style="margin-top: 10px ; margin-left: 500px;
       width: 150px;
       height: 40px;
       background: cornflowerblue 0% 0% no-repeat padding-box;
@@ -275,60 +294,60 @@ button {
       font: 1em Calibri;
       letter-spacing: 0px;
       color: #FFFFFF;
-      opacity: 1;"> 
+      opacity: 1;">
       </form>
     </div>
-  </div>
+    </div>
     <script>
-      document.getElementById("button").addEventListener("click",function(){
-        var file_e= '{{value}}'
+      document.getElementById("button").addEventListener("click", function () {
+        var file_e = '{{value}}'
 
-        if (file_e=='NO'){
-          location.href = "{{ url_for('index2') }}" ;
-          document.querySelector(".popup").style.display ="none";
+        if (file_e == 'NO') {
+          location.href = "{{ url_for('index2') }}";
+          document.querySelector(".popup").style.display = "none";
         }
-        if (file_e=='YES'){
-          document.querySelector(".popup").style.display ="flex";
-        }
-        else{
-          document.querySelector(".popup").style.display ="flex";
-          document.getElementById("append").style.display='none';
+        if (file_e == 'YES') {
+          document.querySelector(".popup").style.display = "flex";
+        } else {
+          document.querySelector(".popup").style.display = "flex";
+          document.getElementById("append").style.display = 'none';
 
         }
-       })
-       document.querySelector(".close").addEventListener("click",function(){
-        document.querySelector(".popup").style.display ="none";
-       })
-     </script>
-
-
-      
-    <script>
-        function myFunction() {
-          var x = document.getElementById("myTopnav");
-          if (x.className === "topnav") {
-            x.className += " responsive";
-          } else {
-            x.className = "topnav";
-          }
-        }
+      })
+      document.querySelector(".close").addEventListener("click", function () {
+        document.querySelector(".popup").style.display = "none";
+      })
     </script>
-          <script>
-            function openNav() {
-              document.getElementById("mySidenav").style.width = "70px";
-            }
-            
-            function closeNav() {
-              document.getElementById("mySidenav").style.width = "0";
-            
-            }
-            </script>
-         
+
+
+
+    <script>
+      function myFunction() {
+        var x = document.getElementById("myTopnav");
+        if (x.className === "topnav") {
+          x.className += " responsive";
+        } else {
+          x.className = "topnav";
+        }
+      }
+    </script>
+    <script>
+      function openNav() {
+        document.getElementById("myNavigationBar").style.width = "70px";
+      }
+
+      function closeNav() {
+        document.getElementById("myNavigationBar").style.width = "0";
+
+      }
+    </script>
+
     <!-- <script>
     $(function(){
       $("#nav-placeholder").load("sidebar.html");
     });
     </script> -->
-    </header>
+  </header>
 </body>
+
 </html>
