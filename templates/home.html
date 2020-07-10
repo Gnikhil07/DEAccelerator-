@@ -21,7 +21,7 @@
     opacity: 1;
   }
 
-  .img1 {
+  .TredenceLogo {
     position: absolute;
     top: 10px;
     left: 80px;
@@ -32,7 +32,7 @@
 
   }
 
-  .button1 {
+  .LogoutButton {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -45,7 +45,7 @@
     z-index: -1px;
   }
 
-  .user1 {
+  .UserLogo {
     position: absolute;
     top: 10px;
     left: 988px;
@@ -87,7 +87,7 @@
     opacity: 1;
   }
 
-  .sidenav {
+  .NavigationBar {
     height: 100%;
     width: 0;
     position: fixed;
@@ -101,7 +101,7 @@
     background: #FFFFFF 0% 0% no-repeat padding-box;
   }
 
-  .sidenav a {
+  .NavigationBar a {
     padding: 7px 8px 8px 25px;
     font-size: 25px;
     display: block;
@@ -109,7 +109,7 @@
   }
 
 
-  .sidenav .closebtn {
+  .NavigationBar .closebtn {
     position: absolute;
     top: 0;
     right: 15px;
@@ -126,15 +126,15 @@
   }
 
   @media screen and (max-height: 450px) {
-    .sidenav {
+    .NavigationBar {
       padding-top: 15px;
     }
 
-    .sidenav a {
+    .NavigationBar a {
       font-size: 18px;
     }
   }
-#table1
+#ActiveRuns
 {
   border-collapse: collapse;
   position: relative;
@@ -143,18 +143,18 @@
   right: 5px;
   width: 98%;
 }
-#table1 td{ font: 0.8em Calibri;
+#ActiveRuns td{ font: 0.8em Calibri;
   }
-#table1 td, #table1 th {
+#ActiveRuns td, #ActiveRuns th {
   border: 1px solid #ddd;
   padding: 8px;
 }
 
-#table1 tr:nth-child(even){background-color: #f2f2f2;}
+#ActiveRuns tr:nth-child(even){background-color: #f2f2f2;}
 
-#table1 tr:hover {background-color: #ddd;}
+#ActiveRuns tr:hover {background-color: #ddd;}
 
-#table1 th {
+#ActiveRuns th {
   font: 1em Calibri;
   padding-top: 12px;
   padding-bottom: 12px;
@@ -174,7 +174,7 @@
     opacity: 1;
     margin-bottom: 100px;
 }
-#table4 {
+#PastRuns {
     border-collapse: collapse;
     position: relative;
     top: 0px;
@@ -182,9 +182,9 @@
     right: 5px;
     width: 98%;
   }
-#table4 td{ font: 0.8em Calibri;}
-  #table4 td,
-  #table4 th {
+#PastRuns td{ font: 0.8em Calibri;}
+  #PastRuns td,
+  #PastRuns th {
     border: 1px solid #ddd;
     background-color: #f2f2f2;
     padding: 8px;
@@ -192,11 +192,11 @@
 
   
   
-  #table4   tbody:hover td[rowspan] {
+  #PastRuns   tbody:hover td[rowspan] {
    background-color: #ddd; 
 }
 
-  #table4 th {
+  #PastRuns th {
     font: 1em Calibri;
     padding-top: 12px;
     padding-bottom: 12px;
@@ -209,15 +209,15 @@
 
 <body>
   <header>
-    <i class=img1></i>
-    <a href="{{ url_for('logout') }}" type="logout" value="logout"><i class = button1></i></a>
-    <i class=user1></i>
+    <i class=TredenceLogo></i>
+    <a href="{{ url_for('logout') }}" type="logout" value="logout"><i class = LogoutButton></i></a>
+    <i class=UserLogo></i>
     <h1 style=" font: 1.2em Calibri;" id='user'>{{ account }}</h1>
     <div id="nav-placeholder">
       <div id="main">
         <a class="openbtn" onclick="openNav()"> <img src="static/Shape 1.svg"></a>
       </div>
-      <div id="mySidenav" class="sidenav">
+      <div id="myNavigationBar" class="NavigationBar">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"><img src="static/Shape 1.svg"></a>
         <a href="{{ url_for('overview') }}" title="Ingestdata"><i class="fas fa-home"></i><img
             src="static/dashboard-active.svg"></a>
@@ -227,19 +227,19 @@
 
 
     </div>
-    <div id="client100">
+    <div id="clientID">
       <p style=" font: 1em Calibri;" >{{ clients }} clients</p>
       <span>
         <img src="static/hand-shake@2x.png" style="width:10%">
       </span>
     </div>
-    <div id="client101">
+    <div id="ProjectID">
       <p style=" font: 1em Calibri;" >{{Project}} Projects</p>
       <span>
         <img src="static/business-affiliate-network@2x.png" style="width:8%">
       </span>
     </div>
-    <div id="client102">
+    <div id="DataOwnerID">
       <p style=" font: 1em Calibri;" >{{Owner}} Data Owner</p>
       <img src="static/signing-the-contract@2x.png" style="width:7%; ">
     </div>
@@ -252,7 +252,7 @@
           <div class="setuppage">
             <div id="table2">
               <p id="activeruns" style="font: 1.3em Calibri; margin-left: 12px;">Active Runs</p>
-                <table id="table1" class="table1" >
+                <table id="ActiveRuns" class="ActiveRuns" >
                   <tr>
                       {% for col in column_names %}
                       <th>{{col}}</th>
@@ -276,7 +276,7 @@
             <p style="font: 1em Calibri; margin-left: 10px;" ></p>
             
           <div id="table3">
-            <table id="table4" class="table4" >
+            <table id="PastRuns" class="PastRuns" >
               <p id="pastruns"table bgcolor="#00ff00" style="font: 1.3em Calibri;margin-left: 10px;">Past Runs</p>
               <tr>
                 {% for col1 in column_names1 %}
@@ -286,7 +286,7 @@
               </tr>
 
               {% for row1 in row_data1 %}
-              <tbody class = "table4">
+              <tbody class = "PastRuns">
               <tr>
                 {% for col1, row_1 in zip1(column_names1, row1) %}
                 {% if col1 == "Relative File Path"%}
@@ -310,11 +310,11 @@
     </div>
     <script>
       function openNav() {
-        document.getElementById("mySidenav").style.width = "70px";
+        document.getElementById("myNavigationBar").style.width = "70px";
       }
 
       function closeNav() {
-        document.getElementById("mySidenav").style.width = "0";
+        document.getElementById("myNavigationBar").style.width = "0";
 
       }
     </script>
