@@ -25,9 +25,9 @@
     position: absolute;
     top: 10px;
     left: 80px;
-    width: 266px;
+    width: 370px;
     height: 32px;
-    background: transparent url('static/Group 298.svg');
+    background: transparent url('static/logo.svg');
     border: none;
 
   }
@@ -227,21 +227,8 @@
 
 
     </div>
-    <div id="clientID">
-      <p style=" font: 1em Calibri;" >{{ clients }} clients</p>
-      <span>
-        <img src="static/hand-shake@2x.png" style="width:10%">
-      </span>
-    </div>
-    <div id="ProjectID">
-      <p style=" font: 1em Calibri;" >{{Project}} Projects</p>
-      <span>
-        <img src="static/business-affiliate-network@2x.png" style="width:8%">
-      </span>
-    </div>
-    <div id="DataOwnerID">
-      <p style=" font: 1em Calibri;" >{{Owner}} Data Owner</p>
-      <img src="static/signing-the-contract@2x.png" style="width:7%; ">
+    <div id="clientID" style="font-size: 40px;">
+      <p> Data Ingestion Framework Director </p>
     </div>
     <div class="searchbar">
       <form action="{{ url_for('homeSearch') }}" method="post">
@@ -289,7 +276,7 @@
               <tbody class = "PastRuns">
               <tr>
                 {% for col1, row_1 in zip1(column_names1, row1) %}
-                {% if col1 == "Relative File Path"%}
+                {% if col1 == "Error/Reject Log"%}
                 <td>{{row_1.split("|")[0]}}</td>
                 {% for i in range(1,4) %}
                   <tr><td>{{row_1.split("|")[i]}}</td></tr>
