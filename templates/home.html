@@ -262,15 +262,26 @@
             </div>
             <p style="font: 1em Calibri; margin-left: 10px;" ></p>
             
-          <div id="table3">
+          <div id="table3" style="overflow-x:auto;">
             <table id="PastRuns" class="PastRuns" >
               <p id="pastruns"table bgcolor="#00ff00" style="font: 1.3em Calibri;margin-left: 10px;">Past Runs</p>
-              <tr>
-                {% for col1 in column_names1 %}
-                <th>{{col1}}</th>
-
-                {% endfor %}
-              </tr>
+                  <tr>
+                      <th rowspan="2">Project Name</th>
+                      <th rowspan="2">Job Name</th>
+                      <th rowspan="2">Start Time</th>
+                      <th rowspan="2">End Time</th>
+                      <th rowspan="2">Total Rows</th>
+                      <th rowspan="2">Ingested Rows</th>
+                      <th rowspan="2">Duplicate Rows</th>
+                      <th rowspan="1" colspan="3">Quality Checks Failed</th>
+                      <th rowspan="2">Rejected Rows</th>
+                      <th rowspan="2">Status</th>
+                      <th rowspan="2">Error/Reject Log</th>
+                  <tr>
+                    <th>Technical Validation</th>
+                    <th>Business Rules</th>
+                    <th>Custom Rules</th>
+                  </tr>
 
               {% for row1 in row_data1 %}
               <tbody class = "PastRuns">
