@@ -834,7 +834,7 @@ import requests,json
 
 @app.route('/pythonlogin/metadata4', methods=['GET', 'POST'])  # direct ingest button when file already exists is no
 def index2():
-    headers = {'Authorization': 'Bearer dapi042eca35a8dd2f707b2562849e33f013'}
+    headers = {'Authorization': 'Bearer dapi9aca1f5a0ec7def2d231632c4a8373f7'}
     data = '{ "job_id" : 17 , "notebook_params": { "EntryId": ' +str(session['EntryID'])+ ' } }'
     response = requests.post('https://adb-6971132450799346.6.azuredatabricks.net/api/2.0/jobs/run-now', headers=headers, data=data)
     print(response)
@@ -848,7 +848,7 @@ def append():
     cursor.execute(" UPDATE datacatlogentry Set Operation = %s Where entryid = %s ;",('Append',int(session['EntryID'])))
     mydb.commit()
     cursor.close()
-    headers = {'Authorization': 'Bearer dapi042eca35a8dd2f707b2562849e33f013'}
+    headers = {'Authorization': 'Bearer dapi9aca1f5a0ec7def2d231632c4a8373f7'}
     data = '{ "job_id" : 17 , "notebook_params": { "EntryId": ' +str(session['EntryID'])+ ' } }'
     response = requests.post('https://adb-6971132450799346.6.azuredatabricks.net/api/2.0/jobs/run-now', headers=headers, data=data)
     print(response)
@@ -861,7 +861,7 @@ def replace():    # Replace ingest button when file already exists is YES and me
     cursor.execute(' UPDATE datacatlogentry Set Operation = %s Where EntryID = %s ; ',('Overwrite',int(session['EntryID'])))
     mydb.commit()
     cursor.close()
-    headers = {'Authorization': 'Bearer dapi042eca35a8dd2f707b2562849e33f013'}
+    headers = {'Authorization': 'Bearer dapi9aca1f5a0ec7def2d231632c4a8373f7'}
     data = '{ "job_id" : 17 , "notebook_params": { "EntryId": ' +str(session['EntryID'])+ ' } }'
     response = requests.post('https://adb-6971132450799346.6.azuredatabricks.net/api/2.0/jobs/run-now', headers=headers, data=data)
     print(response)
