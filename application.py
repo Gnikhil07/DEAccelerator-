@@ -43,7 +43,7 @@ def login():
         password = request.form['password']
         mydb = mysql.connector.connect(host="demetadata.mysql.database.azure.com",user="DEadmin@demetadata",passwd="Tredence@123",database = "deaccelator")
         cursor = mydb.cursor()
-        cursor.execute('SELECT * FROM userdetails WHERE UserName = %s AND UserPassword = %s ;', (username, password))
+        cursor.execute('SELECT * FROM userdetails WHERE userName = %s AND password = %s ;', (username, password))
         # Fetch one record and return result
         account = cursor.fetchone()
         # If account exists in accounts table in out database
